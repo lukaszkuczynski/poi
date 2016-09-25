@@ -1,4 +1,4 @@
-package pl.gihon.fdd.exception;
+package pl.gihon.fdd.poi.exception;
 
 public class StorageFileNotFoundException extends RuntimeException {
 

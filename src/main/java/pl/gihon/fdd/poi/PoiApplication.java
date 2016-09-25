@@ -1,4 +1,4 @@
-package pl.gihon.fdd;
+package pl.gihon.fdd.poi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

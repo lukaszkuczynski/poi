@@ -1,4 +1,4 @@
-package pl.gihon.fdd.exception;
+package pl.gihon.fdd.poi.exception;
 
 import java.io.IOException;
 

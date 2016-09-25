@@ -1,4 +1,4 @@
-package pl.gihon.fdd.io;
+package pl.gihon.fdd.poi.io;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,10 +11,10 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import pl.gihon.fdd.exception.StorageInternalException;
+import pl.gihon.fdd.poi.exception.StorageInternalException;
 
 @Component
-public class StorageService {
+public class StorageServiceTmpFolder implements StorageService {
 
 	private static Logger logger = LoggerFactory.getLogger(StorageService.class);
 
@@ -23,11 +23,13 @@ public class StorageService {
 		return null;
 	}
 
+	@Override
 	public Resource loadAsResource(String filename) {
 		logger.info("loading {}", filename);
 		return null;
 	}
 
+	@Override
 	public int store(MultipartFile file) {
 		try {
 			InputStream is = file.getInputStream();

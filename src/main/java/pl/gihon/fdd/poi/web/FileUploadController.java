@@ -1,4 +1,4 @@
-package pl.gihon.fdd.web;
+package pl.gihon.fdd.poi.web;
 
 import java.io.IOException;
 
@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import pl.gihon.fdd.exception.StorageFileNotFoundException;
-import pl.gihon.fdd.io.StorageService;
+import pl.gihon.fdd.poi.exception.StorageFileNotFoundException;
+import pl.gihon.fdd.poi.io.StorageService;
 
 @Controller
 public class FileUploadController {
