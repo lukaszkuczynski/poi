@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HomeController {
 
-	@RequestMapping("/")
+	@RequestMapping("/home")
 	public ModelAndView home() {
 		ModelAndView mav = new ModelAndView("home");
 		mav.addObject("name", "luk");
