@@ -6,10 +6,18 @@
 </head>
 <body>
 	    
-    <h1>territories</h1>
-    We have 0 territories
+    <h1>areas</h1>
     
-    <h1>places</h1>
+    <form method="post" action="/area">
+    	<input name="name" />
+    	<input type="submit"/>    
+    </form>
+    
+    <ul>
+    	<li th:each="area : ${areas}" th:text="${area.name}"></li>    
+    </ul>
+    
+    <h1>unassigned places</h1>
     
     <ul>
     	<li th:each="place : ${locatedPlaces}" th:text="${place.city}"></li>    

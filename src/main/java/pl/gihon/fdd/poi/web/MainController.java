@@ -6,9 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.RedirectView;
 
 import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
@@ -48,10 +50,19 @@ public class MainController {
 	}
 
 	@GetMapping("")
-	public ModelAndView main(@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces) {
+	public ModelAndView main(@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces,
+			@ModelAttribute("areas") List<Area> areas) {
 		ModelAndView modelAndView = new ModelAndView("main");
 		modelAndView.addObject("locatedPlaces", locatedPlaces);
+		modelAndView.addObject("areas", areas);
 		return modelAndView;
+	}
+
+	@PostMapping("area")
+	public RedirectView addArea(@ModelAttribute("areas") List<Area> areas, @ModelAttribute Area area) {
+		// TODO : form mapping doesnt work
+		areas.add(area);
+		return new RedirectView("/");
 	}
 
 }
