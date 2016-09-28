@@ -10,4 +10,31 @@ public class Place {
 	private List<String> languages;
 	private Date lastMet;
 
+	public long getId() {
+		return id;
+	}
+
+	public String getStreetAndFlat() {
+		return streetAndFlat;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public List<String> getLanguages() {
+		return languages;
+	}
+
+	public Date getLastMet() {
+		return lastMet;
+	}
+
+	public Place(long id, String streetAndFlat, String city) {
+		super();
+		this.id = id;
+		this.streetAndFlat = streetAndFlat;
+		this.city = city;
+	}
+
 }
