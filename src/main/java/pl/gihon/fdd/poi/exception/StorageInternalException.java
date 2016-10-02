@@ -2,7 +2,7 @@ package pl.gihon.fdd.poi.exception;
 
 import java.io.IOException;
 
-public class StorageInternalException extends RuntimeException {
+public class StorageInternalException extends PoiException {
 
 	public StorageInternalException(IOException e) {
 		super(e);

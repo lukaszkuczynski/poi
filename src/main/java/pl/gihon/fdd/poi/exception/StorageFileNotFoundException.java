@@ -1,9 +1,9 @@
 package pl.gihon.fdd.poi.exception;
 
-public class StorageFileNotFoundException extends RuntimeException {
+public class StorageFileNotFoundException extends PoiException {
 
 	public StorageFileNotFoundException(String filename) {
-		throw new RuntimeException("file " + filename + " not found on storage");
+		super("file " + filename + " not found on storage");
 	}
 
 	/**
