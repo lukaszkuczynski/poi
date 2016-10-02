@@ -5,6 +5,7 @@ import java.util.List;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.importer.Importer;
 import pl.gihon.fdd.poi.localisator.Localisator;
 import pl.gihon.fdd.poi.model.Area;
@@ -16,6 +17,7 @@ import pl.gihon.fdd.poi.validator.Validator;
 public class PoiTestE2E {
 
 	Importer importer;
+	Filter filter;
 	Validator validator;
 	Localisator localisator;
 	TestClusterer clusterer;
@@ -28,7 +30,8 @@ public class PoiTestE2E {
 		String filePath = "";
 		List<Place> places = importer.importPlaces(filePath);
 		validator.validate(places);
-		List<LocatedPlace> locatedPlaces = localisator.locate(places);
+		List<Place> filteredPlaces = filter.filter(places);
+		List<LocatedPlace> locatedPlaces = localisator.locate(filteredPlaces);
 
 		// this is job done by user
 		List<Area> areas = clusterer.cluster(locatedPlaces);
