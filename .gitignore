@@ -1,5 +1,6 @@
 target/
 .mvn/
+src/test/java/pl/gihon/fdd/poi/secured/
 
 
 ### STS ###
