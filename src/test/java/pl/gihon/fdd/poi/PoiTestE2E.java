@@ -1,5 +1,6 @@
 package pl.gihon.fdd.poi;
 
+import java.io.File;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -28,7 +29,8 @@ public class PoiTestE2E {
 	public void app_givenAllInputs_printsAreas() {
 
 		String filePath = "";
-		List<Place> places = importer.importPlaces(filePath);
+		File file = new File(filePath);
+		List<Place> places = importer.importPlaces(file);
 		validator.validate(places);
 		List<Place> filteredPlaces = filter.filter(places);
 		List<LocatedPlace> locatedPlaces = localisator.locate(filteredPlaces);
