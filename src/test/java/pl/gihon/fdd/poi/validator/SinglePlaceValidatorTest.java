@@ -8,7 +8,7 @@ import pl.gihon.fdd.poi.model.Place;
 
 public class SinglePlaceValidatorTest {
 
-	private SinglePlaceValidator validator = new CityOnlyKoninValidator();
+	private SinglePlaceValidator validator = new KoninSingleValidator();
 
 	@Test
 	public void singleValidator_givenValidPlace_returnInfoValid() {

@@ -2,7 +2,7 @@ package pl.gihon.fdd.poi.validator;
 
 import pl.gihon.fdd.poi.model.Place;
 
-public class CityOnlyKoninValidator implements SinglePlaceValidator {
+public class KoninSingleValidator implements SinglePlaceValidator {
 
 	@Override
 	public ValidationResult validate(Place place) {
