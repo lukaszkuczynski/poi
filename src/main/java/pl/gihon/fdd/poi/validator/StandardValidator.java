@@ -2,8 +2,9 @@ package pl.gihon.fdd.poi.validator;
 
 import java.util.List;
 
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.google.common.collect.Lists;
 
 import pl.gihon.fdd.poi.model.Place;
 
