@@ -85,4 +85,9 @@ public class Place {
 		this.city = city;
 	}
 
+	@Override
+	public String toString() {
+		return "Place [id=" + id + ", city=" + city + ", streetAndFlat=" + streetAndFlat + "]";
+	}
+
 }
