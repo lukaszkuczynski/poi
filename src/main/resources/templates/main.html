@@ -6,6 +6,25 @@
 </head>
 <body>
 	    
+	<h1>import</h1>
+	
+	<div th:if="${message}">
+	<h2 th:text="${message}"/>
+	</div>
+
+	<div>
+		<form method="POST" enctype="multipart/form-data" action="/csv_file">
+			<table>
+				<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+			</table>
+		</form>
+	</div>
+	
+	Imported files <span th:text="${#lists.size(places)}"> 0 </span> 
+		    
+	    
+	    
     <h1>areas</h1>
     
     <form method="post" action="/area">

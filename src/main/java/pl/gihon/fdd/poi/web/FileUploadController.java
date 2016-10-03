@@ -1,5 +1,6 @@
 package pl.gihon.fdd.poi.web;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,9 +58,9 @@ public class FileUploadController {
 	@PostMapping("/upload")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file, RedirectAttributes redirectAttributes) {
 
-		int size = storageService.store(file);
+		File storedFile = storageService.store(file);
 		redirectAttributes.addFlashAttribute("message", "You successfully uploaded " + file.getOriginalFilename()
-				+ ", uploaded size " + file.getSize() + " size read " + size);
+				+ ", uploaded size " + file.getSize() + " size read " + storedFile.getUsableSpace());
 
 		return "redirect:/upload";
 	}

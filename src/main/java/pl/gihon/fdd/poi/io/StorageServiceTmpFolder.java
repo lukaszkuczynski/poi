@@ -38,13 +38,13 @@ public class StorageServiceTmpFolder implements StorageService {
 	}
 
 	@Override
-	public int store(MultipartFile file) {
+	public File store(MultipartFile file) {
 		try {
 			logger.debug("storing file {} in temp", file);
 			String tmpFolderWithSeparator = tmpFolderWithSeparator();
 			File destFile = new File(tmpFolderWithSeparator + file.getOriginalFilename());
 			file.transferTo(destFile);
-			return (int) file.getSize();
+			return destFile;
 		} catch (IOException e) {
 			throw new StorageInternalException(e);
 		}

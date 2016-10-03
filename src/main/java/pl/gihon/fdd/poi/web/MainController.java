@@ -1,29 +1,53 @@
 package pl.gihon.fdd.poi.web;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import pl.gihon.fdd.poi.importer.Importer;
+import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
 
-@RequestMapping("/")
+@RequestMapping(MainController.HOME_MAPPING)
 @Controller
-@SessionAttributes({ "areas", "locatedPlaces" })
+@SessionAttributes({ "areas", "locatedPlaces", "places" })
 public class MainController {
 	// TODO remove later on
 	static public List<LocatedPlace> placesPredefined = new ArrayList<>();
 
-	static {
+	@ModelAttribute("places")
+	private List<Place> places() {
+		return new ArrayList<>();
+	}
+
+	private static Logger LOGGER = LoggerFactory.getLogger(MainController.class);
+
+	static final String HOME_MAPPING = "/";
+	private static RedirectView HOME_REDIRECT = new RedirectView(HOME_MAPPING);
+
+	@Autowired
+	private Importer importer;
+	@Autowired
+	private StorageService storage;
+
+	{
 		Place place1 = new Place(1, "Wielka 1", "Poznan");
 		LocatedPlace pl1 = new LocatedPlace("41", "11", place1);
 		placesPredefined.add(pl1);
@@ -51,10 +75,11 @@ public class MainController {
 
 	@GetMapping("")
 	public ModelAndView main(@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces,
-			@ModelAttribute("areas") List<Area> areas) {
+			@ModelAttribute("areas") List<Area> areas, @ModelAttribute("places") List<Place> places) {
 		ModelAndView modelAndView = new ModelAndView("main");
 		modelAndView.addObject("locatedPlaces", locatedPlaces);
 		modelAndView.addObject("areas", areas);
+		modelAndView.addObject("places", places);
 		return modelAndView;
 	}
 
@@ -62,7 +87,19 @@ public class MainController {
 	public RedirectView addArea(@ModelAttribute("areas") List<Area> areas, @ModelAttribute Area area) {
 		// TODO : form mapping doesnt work
 		areas.add(area);
-		return new RedirectView("/");
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("csv_file")
+	public RedirectView handleFileUpload(@RequestParam("file") MultipartFile file,
+			@ModelAttribute("places") List<Place> places, RedirectAttributes redirectAttributes) {
+		String msg = "You successfully uploaded " + file.getOriginalFilename() + ", uploaded size " + file.getSize();
+		LOGGER.info(msg);
+		redirectAttributes.addFlashAttribute("message", msg);
+		File storedFile = storage.store(file);
+		List<Place> placesImported = importer.importPlaces(storedFile);
+		places.addAll(placesImported);
+		return HOME_REDIRECT;
 	}
 
 }
