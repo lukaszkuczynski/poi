@@ -22,6 +22,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.importer.Importer;
 import pl.gihon.fdd.poi.io.StorageService;
+import pl.gihon.fdd.poi.localisator.Localisator;
 import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
@@ -53,6 +54,8 @@ public class MainController {
 	private Validator validator;
 	@Autowired
 	private Filter filter;
+	@Autowired
+	private Localisator localisator;
 
 	{
 		Place place1 = new Place(1, "Wielka 1", "Poznan");
@@ -76,7 +79,8 @@ public class MainController {
 
 	@ModelAttribute("locatedPlaces")
 	public List<LocatedPlace> locatedPlaces() {
-		return placesPredefined;
+		// return placesPredefined;
+		return new ArrayList<>();
 	}
 
 	@GetMapping("")
@@ -132,6 +136,19 @@ public class MainController {
 		String msg = String.format("Places filtered, before %d, after %d", places.size(), matching.size());
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
+
+		places.clear();
+		places.addAll(matching);
+
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("locate")
+	public RedirectView locate(@ModelAttribute("places") List<Place> places,
+			@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces, RedirectAttributes redirectAttributes) {
+
+		locatedPlaces.clear();
+		locatedPlaces.addAll(localisator.locate(places));
 
 		return HOME_REDIRECT;
 	}

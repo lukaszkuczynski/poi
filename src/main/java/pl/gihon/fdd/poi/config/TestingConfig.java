@@ -11,6 +11,8 @@ import com.google.common.collect.Lists;
 import pl.gihon.fdd.poi.filter.PredicateForFilter;
 import pl.gihon.fdd.poi.importer.CsvImporter;
 import pl.gihon.fdd.poi.importer.Importer;
+import pl.gihon.fdd.poi.localisator.EmptyLocalistor;
+import pl.gihon.fdd.poi.localisator.Localisator;
 import pl.gihon.fdd.poi.model.Place;
 import pl.gihon.fdd.poi.validator.PredicateValidator;
 import pl.gihon.fdd.poi.validator.SinglePlaceValidator;
@@ -64,6 +66,11 @@ public class TestingConfig {
 		Predicate<Place> predicate = p -> !p.getLang1().contains("Romanian");
 		PredicateForFilter predicateForFilter = new PredicateForFilter(predicate, "not Romanian");
 		return predicateForFilter;
+	}
+
+	@Bean
+	Localisator localisator() {
+		return new EmptyLocalistor();
 	}
 
 }
