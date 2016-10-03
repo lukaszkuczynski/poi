@@ -2,3 +2,5 @@ id	city	address	host	other_st	Last met	Language 1	Language 2	other_rl	key	latitu
 1	Konin	Spółdzielców 1			2016-01-12	German	English	p	key	latitude	longitude	n1
 2	Konin	Kolejowa 12/3			2015-12-13	Hungarian,French	English	p	key	lat	long	n2
 3	Konin	Leśna 41			2016-09-10	Hindu		p	key	lat	long
+4	Konin	Leśna 42			2016-09-10	Romanian		p	key	lat	long
+20	Konin	Leśna 43			2016-09-10	Hindu		p	key	lat	long

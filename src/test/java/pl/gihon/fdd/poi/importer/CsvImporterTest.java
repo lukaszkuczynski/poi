@@ -22,7 +22,7 @@ public class CsvImporterTest {
 		assertThat(file.exists()).isTrue();
 
 		List<Place> places = importer.importPlaces(file);
-		assertThat(places).hasSize(3);
+		assertThat(places).hasSize(5);
 	}
 
 	@Test

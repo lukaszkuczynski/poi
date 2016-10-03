@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.common.collect.Lists;
 
+import pl.gihon.fdd.poi.filter.PredicateForFilter;
 import pl.gihon.fdd.poi.importer.CsvImporter;
 import pl.gihon.fdd.poi.importer.Importer;
 import pl.gihon.fdd.poi.model.Place;
@@ -44,7 +45,25 @@ public class TestingConfig {
 		return predicateValidator;
 	}
 
-	// @Bean
-	// PredicateForFilter
+	@Bean
+	PredicateForFilter filterHavingKeyKey() {
+		Predicate<Place> predicate = p -> p.getKey().equals("key");
+		PredicateForFilter predicateForFilter = new PredicateForFilter(predicate, "key is key");
+		return predicateForFilter;
+	}
+
+	@Bean
+	PredicateForFilter filterHavingSmallId() {
+		Predicate<Place> predicate = p -> p.getId() < 20;
+		PredicateForFilter predicateForFilter = new PredicateForFilter(predicate, "id < 20");
+		return predicateForFilter;
+	}
+
+	@Bean
+	PredicateForFilter filterNotRomanian() {
+		Predicate<Place> predicate = p -> !p.getLang1().contains("Romanian");
+		PredicateForFilter predicateForFilter = new PredicateForFilter(predicate, "not Romanian");
+		return predicateForFilter;
+	}
 
 }

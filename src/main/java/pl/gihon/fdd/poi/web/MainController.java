@@ -51,7 +51,7 @@ public class MainController {
 	private Importer importer;
 	@Autowired
 	private Validator validator;
-	// @Autowired
+	@Autowired
 	private Filter filter;
 
 	{
@@ -115,6 +115,7 @@ public class MainController {
 			validator.validate(places);
 			String msg = "validation successful";
 			LOGGER.info(msg);
+			redirectAttributes.addFlashAttribute("message", msg);
 		} catch (ValidationException e) {
 			String msg = e.getMessage();
 			LOGGER.warn(msg);
