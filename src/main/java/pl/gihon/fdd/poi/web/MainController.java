@@ -19,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.importer.Importer;
 import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.model.Area;
@@ -50,6 +51,8 @@ public class MainController {
 	private Importer importer;
 	@Autowired
 	private Validator validator;
+	// @Autowired
+	private Filter filter;
 
 	{
 		Place place1 = new Place(1, "Wielka 1", "Poznan");
@@ -118,6 +121,17 @@ public class MainController {
 			redirectAttributes.addFlashAttribute("message", msg);
 			redirectAttributes.addFlashAttribute("errors", e.getErrorMessages());
 		}
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("filter")
+	public RedirectView filter(@ModelAttribute("places") List<Place> places, RedirectAttributes redirectAttributes) {
+		List<Place> matching = filter.filter(places);
+
+		String msg = String.format("Places filtered, before %d, after %d", places.size(), matching.size());
+		LOGGER.info(msg);
+		redirectAttributes.addFlashAttribute("message", msg);
+
 		return HOME_REDIRECT;
 	}
 

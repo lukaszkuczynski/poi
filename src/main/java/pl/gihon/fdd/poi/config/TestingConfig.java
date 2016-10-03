@@ -43,4 +43,8 @@ public class TestingConfig {
 		PredicateValidator predicateValidator = new PredicateValidator(predicate, "validatorIdPositive");
 		return predicateValidator;
 	}
+
+	// @Bean
+	// PredicateForFilter
+
 }
