@@ -3,11 +3,19 @@ package pl.gihon.fdd.poi.validator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 
 import pl.gihon.fdd.poi.model.Place;
 
+/**
+ * standard validator expects List of Single Validators
+ * 
+ * @author luk
+ *
+ */
+@Component
 public class StandardValidator implements Validator {
 
 	List<SinglePlaceValidator> validators;
@@ -30,7 +38,8 @@ public class StandardValidator implements Validator {
 			}
 		}
 		if (!errorMessages.isEmpty()) {
-			throw new ValidationException("invalid, first is " + errorMessages.get(0));
+			throw new ValidationException(String.format("invalid, first exceptions is '%s', total number %d",
+					errorMessages.get(0), errorMessages.size()), errorMessages);
 		}
 
 	}

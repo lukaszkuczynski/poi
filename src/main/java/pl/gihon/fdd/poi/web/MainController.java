@@ -24,6 +24,8 @@ import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
+import pl.gihon.fdd.poi.validator.ValidationException;
+import pl.gihon.fdd.poi.validator.Validator;
 
 @RequestMapping(MainController.HOME_MAPPING)
 @Controller
@@ -43,9 +45,11 @@ public class MainController {
 	private static RedirectView HOME_REDIRECT = new RedirectView(HOME_MAPPING);
 
 	@Autowired
+	private StorageService storage;
+	@Autowired
 	private Importer importer;
 	@Autowired
-	private StorageService storage;
+	private Validator validator;
 
 	{
 		Place place1 = new Place(1, "Wielka 1", "Poznan");
@@ -69,7 +73,6 @@ public class MainController {
 
 	@ModelAttribute("locatedPlaces")
 	public List<LocatedPlace> locatedPlaces() {
-		// return new ArrayList<>();
 		return placesPredefined;
 	}
 
@@ -98,7 +101,23 @@ public class MainController {
 		redirectAttributes.addFlashAttribute("message", msg);
 		File storedFile = storage.store(file);
 		List<Place> placesImported = importer.importPlaces(storedFile);
+		places.clear();
 		places.addAll(placesImported);
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("validate")
+	public RedirectView validate(@ModelAttribute("places") List<Place> places, RedirectAttributes redirectAttributes) {
+		try {
+			validator.validate(places);
+			String msg = "validation successful";
+			LOGGER.info(msg);
+		} catch (ValidationException e) {
+			String msg = e.getMessage();
+			LOGGER.warn(msg);
+			redirectAttributes.addFlashAttribute("message", msg);
+			redirectAttributes.addFlashAttribute("errors", e.getErrorMessages());
+		}
 		return HOME_REDIRECT;
 	}
 

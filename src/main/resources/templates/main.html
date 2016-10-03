@@ -1,46 +1,60 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Getting Started: Serving Web Content</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-	    
+
 	<h1>import</h1>
-	
+
 	<div th:if="${message}">
-	<h2 th:text="${message}"/>
+		<h2 th:text="${message}" />
+	</div>
+
+	<div th:if="${errors}">
+		<p th:text="'error count is ' + ${#lists.size(errors)}" />
 	</div>
 
 	<div>
 		<form method="POST" enctype="multipart/form-data" action="/csv_file">
 			<table>
-				<tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-				<tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+				<tr>
+					<td>File to upload:</td>
+					<td><input type="file" name="file" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Upload" /></td>
+				</tr>
 			</table>
 		</form>
 	</div>
-	
-	Imported files <span th:text="${#lists.size(places)}"> 0 </span> 
-		    
-	    
-	    
-    <h1>areas</h1>
-    
-    <form method="post" action="/area">
-    	<input name="name" />
-    	<input type="submit"/>    
-    </form>
-    
-    <ul>
-    	<li th:each="area : ${areas}" th:text="${area.name}"></li>    
-    </ul>
-    
-    <h1>unassigned places</h1>
-    
-    <ul>
-    	<li th:each="place : ${locatedPlaces}" th:text="${place.city}"></li>    
-    </ul>
-    
+
+	Imported files
+	<span th:text="${#lists.size(places)}"> 0 </span>
+
+
+	<h1>validate</h1>
+	<form method="post" action="/validate">
+		<input type="submit" />
+	</form>
+
+	<h1>areas</h1>
+
+	<form method="post" action="/area">
+		<input name="name" /> <input type="submit" />
+	</form>
+
+	<ul>
+		<li th:each="area : ${areas}" th:text="${area.name}"></li>
+	</ul>
+
+	<h1>unassigned places</h1>
+
+	<ul>
+		<li th:each="place : ${locatedPlaces}" th:text="${place.city}"></li>
+	</ul>
+
 </body>
 </html>
