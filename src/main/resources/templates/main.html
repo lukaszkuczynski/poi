@@ -1,12 +1,23 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Getting Started: Serving Web Content</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Getting Started: Serving Web Content</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"	integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+	crossorigin="anonymous"></script>
+	
+	<script>
+		$('document').ready(function() {
+			alert('z');
+		});
+	</script>
 </head>
+
 <body>
 
 	<h1>import</h1>
+
+
 
 	<div th:if="${message}">
 		<h2 th:text="${message}" />
@@ -16,39 +27,40 @@
 		<p th:text="'error count is ' + ${#lists.size(errors)}" />
 	</div>
 
-	<div>
-		<form method="POST" enctype="multipart/form-data" action="/csv_file">
-			<table>
-				<tr>
-					<td>File to upload:</td>
-					<td><input type="file" name="file" /></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="submit" value="Upload" /></td>
-				</tr>
-			</table>
+	<div id="prephase">
+		<div>
+			<form method="POST" enctype="multipart/form-data" action="/csv_file">
+				<table>
+					<tr>
+						<td>File to upload:</td>
+						<td><input type="file" name="file" /></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td><input type="submit" value="Upload" /></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+
+		Imported files <span th:text="${#lists.size(places)}"> 0 </span>
+
+
+		<h1>validate</h1>
+		<form method="post" action="/validate">
+			<input type="submit" />
+		</form>
+
+		<h1>filter</h1>
+		<form method="post" action="/filter">
+			<input type="submit" />
+		</form>
+
+		<h1>locate</h1>
+		<form method="post" action="/locate">
+			<input type="submit" />
 		</form>
 	</div>
-
-	Imported files
-	<span th:text="${#lists.size(places)}"> 0 </span>
-
-
-	<h1>validate</h1>
-	<form method="post" action="/validate">
-		<input type="submit" />
-	</form>
-
-	<h1>filter</h1>
-	<form method="post" action="/filter">
-		<input type="submit" />
-	</form>
-	
-	<h1>locate</h1>
-	<form method="post" action="/locate">
-		<input type="submit" />
-	</form>
 
 	<h1>areas</h1>
 

@@ -149,6 +149,9 @@ public class MainController {
 
 		locatedPlaces.clear();
 		locatedPlaces.addAll(localisator.locate(places));
+		String msg = String.format("%d places located", locatedPlaces.size());
+		LOGGER.info(msg);
+		redirectAttributes.addFlashAttribute("message", msg);
 
 		return HOME_REDIRECT;
 	}

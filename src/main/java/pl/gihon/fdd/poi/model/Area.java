@@ -31,6 +31,18 @@ public class Area {
 		return name;
 	}
 
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPlaces(List<LocatedPlace> places) {
+		this.places = places;
+	}
+
 	public List<LocatedPlace> getPlaces() {
 		return places;
 	}
