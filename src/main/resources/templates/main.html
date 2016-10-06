@@ -8,15 +8,18 @@
 	
 	<script>
 		$('document').ready(function() {
-			alert('z');
+			$('button#prephase_visible').click(function() {
+				$('#prephase').toggle();
+			});
+			
+			$('button#prephase_visible').click();
 		});
 	</script>
 </head>
 
 <body>
 
-	<h1>import</h1>
-
+	<button id="prephase_visible">Show/Hide prephase</button>
 
 
 	<div th:if="${message}">
@@ -28,6 +31,7 @@
 	</div>
 
 	<div id="prephase">
+		<h1>import</h1>
 		<div>
 			<form method="POST" enctype="multipart/form-data" action="/csv_file">
 				<table>
@@ -63,20 +67,35 @@
 	</div>
 
 	<h1>areas</h1>
-
+	<h2>add new area</h2>
 	<form method="post" action="/area">
-		<input name="name" /> <input type="submit" />
+		<label for="nr">nr</label> <input name="nr" th:value="${suggestedAreaNr}"/>
+		<label for="name">name</label> <input name="name"/> 
+		<input type="submit" />
 	</form>
 
-	<ul>
-		<li th:each="area : ${areas}" th:text="${area.name}"></li>
-	</ul>
+	<div class="area" th:each="area : ${areas}">
+		<h3>add place to area</h3>
+		<label th:text="'area name ' + ${area.name} + ' nr '+ ${area.nr}"></label>
+		<form action="/area/assign-place" method="post">
+			<label for="id">place id</label><input type="number" name="placeId" />
+			<input type="hidden" name="areaNr" th:value="${area.nr}" />			
+		</form>
+		<h3>list of places</h3>
+		<div class="place_in_area" th:each="place : ${area.places}">
+			<label th:text="${place.id}"></label>
+		</div>
+		
+	</div>
 
 	<h1>unassigned places</h1>
 
-	<ul>
-		<li th:each="place : ${locatedPlaces}" th:text="${place.city}"></li>
-	</ul>
+	<div id="unassignedPlaces">
+		<div class="unassignedPlace" th:each="place : ${unassignedPlaces}">
+			<span>place </span> <span th:text="${place.streetAndFlat}"/>
+			<span>id</span> <span th:text="${place.id}">id</span>
+		</div>
+	</div>
 
 </body>
 </html>

@@ -5,13 +5,13 @@ import java.util.List;
 
 public class Area {
 
-	private long id;
+	private long nr;
 	private String name;
 	private List<LocatedPlace> places = new ArrayList<>();
 
-	public Area(long id, String name) {
+	public Area(long nr, String name) {
 		super();
-		this.id = id;
+		this.nr = nr;
 		this.name = name;
 	}
 
@@ -23,16 +23,16 @@ public class Area {
 		return places.size();
 	}
 
-	public long getId() {
-		return id;
+	public long getNr() {
+		return nr;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setNr(long nr) {
+		this.nr = nr;
 	}
 
 	public void setName(String name) {
@@ -45,6 +45,11 @@ public class Area {
 
 	public List<LocatedPlace> getPlaces() {
 		return places;
+	}
+
+	public void addPlace(LocatedPlace place) {
+		places.add(place);
+
 	}
 
 }

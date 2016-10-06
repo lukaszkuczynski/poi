@@ -3,6 +3,7 @@ package pl.gihon.fdd.poi.web;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ import pl.gihon.fdd.poi.validator.Validator;
 
 @RequestMapping(MainController.HOME_MAPPING)
 @Controller
-@SessionAttributes({ "areas", "locatedPlaces", "places" })
+@SessionAttributes({ "areas", "locatedPlaces", "places", "unassignedPlaces" })
 public class MainController {
 	// TODO remove later on
 	static public List<LocatedPlace> placesPredefined = new ArrayList<>();
@@ -61,13 +62,13 @@ public class MainController {
 		Place place1 = new Place(1, "Wielka 1", "Poznan");
 		LocatedPlace pl1 = new LocatedPlace("41", "11", place1);
 		placesPredefined.add(pl1);
-		Place place2 = new Place(1, "Wielka 23", "Poznan");
+		Place place2 = new Place(2, "Wielka 23", "Poznan");
 		LocatedPlace pl2 = new LocatedPlace("32", "5", place2);
 		placesPredefined.add(pl2);
-		Place place3 = new Place(1, "Srubowa 3", "Koni");
+		Place place3 = new Place(3, "Srubowa 3", "Koni");
 		LocatedPlace pl3 = new LocatedPlace("45", "14", place3);
 		placesPredefined.add(pl3);
-		Place place4 = new Place(1, "Szczególna 23", "Dziębieżewo");
+		Place place4 = new Place(4, "Szczególna 23", "Dziębieżewo");
 		LocatedPlace pl4 = new LocatedPlace("56", "23", place4);
 		placesPredefined.add(pl4);
 	}
@@ -79,15 +80,20 @@ public class MainController {
 
 	@ModelAttribute("locatedPlaces")
 	public List<LocatedPlace> locatedPlaces() {
-		// return placesPredefined;
 		return new ArrayList<>();
 	}
 
+	@ModelAttribute("unassignedPlaces")
+	public List<LocatedPlace> unassignedPlaces() {
+		return placesPredefined;
+		// return new ArrayList<>();
+	}
+
 	@GetMapping("")
-	public ModelAndView main(@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces,
+	public ModelAndView main(@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
 			@ModelAttribute("areas") List<Area> areas, @ModelAttribute("places") List<Place> places) {
 		ModelAndView modelAndView = new ModelAndView("main");
-		modelAndView.addObject("locatedPlaces", locatedPlaces);
+		modelAndView.addObject("unassignedPlaces", unassignedPlaces);
 		modelAndView.addObject("areas", areas);
 		modelAndView.addObject("places", places);
 		return modelAndView;
@@ -95,7 +101,6 @@ public class MainController {
 
 	@PostMapping("area")
 	public RedirectView addArea(@ModelAttribute("areas") List<Area> areas, @ModelAttribute Area area) {
-		// TODO : form mapping doesnt work
 		areas.add(area);
 		return HOME_REDIRECT;
 	}
@@ -149,10 +154,28 @@ public class MainController {
 
 		locatedPlaces.clear();
 		locatedPlaces.addAll(localisator.locate(places));
+		// unassignedPlaces.clear();
+		// TODO : located -> unassigned
 		String msg = String.format("%d places located", locatedPlaces.size());
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
 
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("area/assign-place")
+	public RedirectView assignPlaceToArea(@ModelAttribute AssignPlaceToAreaForm form,
+			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
+			@ModelAttribute("areas") List<Area> areas) {
+		Optional<Area> areaCandidate = areas.stream().filter(a -> a.getNr() == form.getAreaNr()).findFirst();
+		Optional<LocatedPlace> placeCandidate = unassignedPlaces.stream().filter(p -> p.getId() == form.getPlaceId())
+				.findFirst();
+		// TODO : what if no place or no area
+		LocatedPlace place = placeCandidate.get();
+
+		areaCandidate.get().addPlace(place);
+		int indexOf = unassignedPlaces.indexOf(place);
+		unassignedPlaces.remove(indexOf);
 		return HOME_REDIRECT;
 	}
 
