@@ -1,6 +1,7 @@
 package pl.gihon.fdd.poi;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Ignore;
@@ -26,7 +27,7 @@ public class PoiTestE2E {
 
 	@Test
 	@Ignore
-	public void app_givenAllInputs_printsAreas() {
+	public void app_givenAllInputs_printsAreas() throws IOException {
 
 		String filePath = "";
 		File file = new File(filePath);

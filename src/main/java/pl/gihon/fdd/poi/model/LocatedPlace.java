@@ -5,6 +5,7 @@ public class LocatedPlace extends Place {
 	private String longitude;
 	private Place place;
 
+	// TODO: remove Place, this should be the only Place! with flag isLocated()
 	public LocatedPlace(String latitude, String longitude, Place place) {
 		super(place.getId(), place.getStreetAndFlat(), place.getCity());
 		this.place = place;
