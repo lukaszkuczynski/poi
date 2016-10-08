@@ -10,7 +10,7 @@ public class PyPlace {
 	private String lang1;
 	private String lang2;
 	private long id;
-	private String district;
+	private String district = "";
 	private String latitude;
 	private String longitude;
 	private String latlng;
@@ -19,7 +19,10 @@ public class PyPlace {
 		this.city = place.getCity();
 		this.street = place.getStreetAndFlat();
 		this.status = place.getStatus();
-		this.lastmet = place.getLastMet().toString();
+		this.lastmet = "";
+		if (place.getLastMet() != null) {
+			this.lastmet = place.getLastMet().toString();
+		}
 		this.lang1 = place.getLang1();
 		this.lang2 = place.getLang2();
 		this.id = place.getId();
