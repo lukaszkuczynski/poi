@@ -14,4 +14,8 @@ public class GoogleLocalisatorException extends PoiException {
 		super("for place " + place.getCity() + "," + place.getStreetAndFlat() + " error is " + string);
 	}
 
+	public GoogleLocalisatorException(Place place, GeocodingResponse response) {
+		super("for place " + place.getCity() + ", response is + " + response);
+	}
+
 }

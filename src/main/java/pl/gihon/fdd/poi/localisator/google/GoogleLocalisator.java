@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.apache.http.client.ClientProtocolException;
@@ -15,7 +14,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,6 +31,8 @@ public class GoogleLocalisator implements Localisator {
 	private static final Object GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 	@Value("${google.geocoding.sleep}")
 	private int sleepTime;
+	@Value("${google.api.key}")
+	private String googleApiKey;
 
 	@Override
 	public List<LocatedPlace> locate(List<Place> places) {
@@ -47,7 +47,7 @@ public class GoogleLocalisator implements Localisator {
 			Thread.sleep(sleepTime);
 			GeocodingResponse response = mapResponse(responseText);
 			if (!response.getStatus().equals("OK")) {
-				throw new GoogleLocalisatorException(place, "status is " + response.getStatus());
+				throw new GoogleLocalisatorException(place, response);
 			}
 			if (response.getResults().size() < 1) {
 				throw new GoogleLocalisatorException(place, "no results found");
@@ -70,14 +70,11 @@ public class GoogleLocalisator implements Localisator {
 
 	private String queryApiForText(Place place)
 			throws IOException, UnsupportedEncodingException, ClientProtocolException {
-		Properties props = new Properties();
-		props.load(new ClassPathResource("credentials.properties").getInputStream());
-		String apiKey = props.getProperty("google.key");
 		String addressValues = URLEncoder.encode(String.format("%s, %s", place.getCity(), place.getStreetAndFlat()),
 				"UTF-8");
 
 		StringBuilder sb = new StringBuilder();
-		sb.append(GEOCODING_URL).append("address=").append(addressValues).append("&key=").append(apiKey);
+		sb.append(GEOCODING_URL).append("address=").append(addressValues).append("&key=").append(googleApiKey);
 
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(sb.toString());
