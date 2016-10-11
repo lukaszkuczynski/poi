@@ -33,4 +33,9 @@ public class LocatedPlace extends Place {
 		return place.getCity();
 	}
 
+	@Override
+	public String toString() {
+		return "LocatedPlace [latitude=" + latitude + ", longitude=" + longitude + "]";
+	}
+
 }

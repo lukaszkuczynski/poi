@@ -1,3 +1,4 @@
+**/credentials.properties
 target/
 .mvn/
 src/test/java/pl/gihon/fdd/poi/secured/
