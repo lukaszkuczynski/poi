@@ -39,6 +39,10 @@ public class GoogleLocalisator implements Localisator {
 		return places.stream().map(p -> locate(p)).collect(Collectors.toList());
 	}
 
+	public String getStartOfApiKey() {
+		return googleApiKey.substring(0, 5);
+	}
+
 	private LocatedPlace locate(Place place) {
 
 		try {

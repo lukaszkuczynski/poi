@@ -23,7 +23,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.importer.Importer;
 import pl.gihon.fdd.poi.io.StorageService;
-import pl.gihon.fdd.poi.localisator.Localisator;
+import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
 import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
@@ -56,7 +56,7 @@ public class MainController {
 	@Autowired
 	private Filter filter;
 	@Autowired
-	private Localisator localisator;
+	private GoogleLocalisator localisator;
 
 	{
 		Place place1 = new Place(1, "Wielka 1", "Poznan");
@@ -96,6 +96,8 @@ public class MainController {
 		modelAndView.addObject("unassignedPlaces", unassignedPlaces);
 		modelAndView.addObject("areas", areas);
 		modelAndView.addObject("places", places);
+		modelAndView.addObject("apiPart", localisator.getStartOfApiKey());
+
 		return modelAndView;
 	}
 

@@ -9,6 +9,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class PoiApplicationTests {
 
+	static {
+		System.setProperty("GOOGLE_API_KEY", "FAKE KEY");
+	}
+
 	@Test
 	public void contextLoads() {
 	}
