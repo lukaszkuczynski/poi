@@ -1,7 +1,10 @@
 package pl.gihon.fdd.poi.web;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -71,7 +74,18 @@ public class CacheController {
 		} catch (IOException ex) {
 			throw new PoiException("IOError writing file to output stream");
 		}
+	}
 
+	@PostMapping(value = "/save")
+	public RedirectView saveFile(HttpServletResponse response, RedirectAttributes redirectAttributes)
+			throws IOException {
+		ByteArrayOutputStream baos = locationCache.export();
+		File tempFile = Files.createTempFile("cache_export", ".csv").toFile();
+		try (FileOutputStream fos = new FileOutputStream(tempFile)) {
+			fos.write(baos.toByteArray());
+		}
+		redirectAttributes.addFlashAttribute("message", "saved to file " + tempFile.getAbsolutePath());
+		return CACHE_REDIRECT;
 	}
 
 }
