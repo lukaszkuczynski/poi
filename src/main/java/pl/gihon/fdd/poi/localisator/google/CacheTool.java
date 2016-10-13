@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,10 @@ public class CacheTool {
 	public CacheTool(Cache cache) {
 		super();
 		this.cache = cache;
+	}
+
+	public int getCacheSize() {
+		return cache.getSize();
 	}
 
 	public ByteArrayOutputStream export() {
@@ -61,6 +66,15 @@ public class CacheTool {
 			throw new PoiException(e);
 		}
 
+	}
+
+	public Optional<String> getByKey(String key) {
+		if (!cache.isKeyInCache(key)) {
+			return Optional.empty();
+		}
+		Element element = cache.get(key);
+		String objectValueAsStr = (String) element.getObjectValue();
+		return Optional.of(objectValueAsStr);
 	}
 
 }

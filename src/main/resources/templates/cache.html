@@ -2,9 +2,13 @@
 <body>
 
 	<h1>Cache page</h1>
-
+	
 	<div th:if="${message}">
 		<h2 th:text="${message}"/>
+	</div>
+	
+	<div>
+		<p>Cache size is <h3 th:text="${cacheSize}"></h3></p>
 	</div>
 
 	<div>
