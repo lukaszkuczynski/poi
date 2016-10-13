@@ -6,7 +6,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ContextTest {
+public abstract class ContextTest {
 
 	static {
 		System.setProperty("GOOGLE_API_KEY", "FAKE_KEY");
