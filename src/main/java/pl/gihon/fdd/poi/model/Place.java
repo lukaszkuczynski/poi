@@ -77,6 +77,18 @@ public class Place {
 		return lastMet;
 	}
 
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setLang1(String lang1) {
+		this.lang1 = lang1;
+	}
+
+	public void setLang2(String lang2) {
+		this.lang2 = lang2;
+	}
+
 	// for Jackson
 	public Place() {
 		super();
