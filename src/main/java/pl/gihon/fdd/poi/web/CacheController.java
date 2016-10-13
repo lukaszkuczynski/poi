@@ -23,7 +23,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import pl.gihon.fdd.poi.exception.PoiException;
-import pl.gihon.fdd.poi.localisator.google.CacheTool;
+import pl.gihon.fdd.poi.localisator.google.LocationCache;
 
 @Controller
 @RequestMapping("/cache")
@@ -33,13 +33,13 @@ public class CacheController {
 	private static final Logger logger = LoggerFactory.getLogger(CacheController.class);
 
 	@Autowired
-	private CacheTool cacheTool;
+	private LocationCache locationCache;
 
 	@GetMapping
 	public String cache(Model model) {
-		List<KeyVal> keyvals = cacheTool.getAllRows();
+		List<KeyVal> keyvals = locationCache.getAllRows();
 		model.addAttribute("rows", keyvals);
-		model.addAttribute("cacheSize", cacheTool.getCacheSize());
+		model.addAttribute("cacheSize", locationCache.getSize());
 		return "cache";
 	}
 
@@ -47,21 +47,21 @@ public class CacheController {
 	public RedirectView upload(MultipartFile file, RedirectAttributes redirectAttributes) throws IOException {
 		logger.debug("uploading file size {}", file.getSize());
 		redirectAttributes.addFlashAttribute("message", "uploaded file size " + file.getSize());
-		cacheTool.importToCache(file.getInputStream());
+		locationCache.importToCache(file.getInputStream());
 		return CACHE_REDIRECT;
 	}
 
 	@GetMapping("/key/{cacheKey}")
 	@ResponseBody
 	public String getCacheValue(@PathVariable("cacheKey") String key) {
-		Optional<String> valueOpt = cacheTool.getByKey(key);
+		Optional<String> valueOpt = locationCache.getValue(key);
 		return valueOpt.orElse("<no value>");
 	}
 
 	@PostMapping(value = "/export")
 	public void getFile(HttpServletResponse response) {
 		try {
-			ByteArrayOutputStream baos = cacheTool.export();
+			ByteArrayOutputStream baos = locationCache.export();
 			response.getOutputStream().write(baos.toByteArray());
 			String filename = "export_cache_" + new Date().toString() + ".csv";
 			response.setContentType("text/csv");

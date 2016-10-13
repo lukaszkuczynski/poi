@@ -6,48 +6,51 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
 import pl.gihon.fdd.poi.exception.PoiException;
 import pl.gihon.fdd.poi.web.KeyVal;
 
 @Component
-public class CacheTool {
+public class LocationCacheMap implements LocationCache {
 
 	private static final char CSV_SEPARATOR = ';';
-	private static Logger logger = LoggerFactory.getLogger(CacheTool.class);
-	private Cache cache;
+	private Map<String, String> map = new HashMap<>();
 
-	@Autowired
-	public CacheTool(Cache cache) {
-		super();
-		this.cache = cache;
+	@Override
+	public void put(String key, String value) {
+		map.put(key, value);
 	}
 
-	public int getCacheSize() {
-		return cache.getSize();
+	@Override
+	public Optional<String> getValue(String key) {
+		if (!map.containsKey(key)) {
+			return Optional.empty();
+		}
+		return Optional.of(map.get(key));
 	}
 
+	@Override
+	public void clear() {
+		this.map.clear();
+
+	}
+
+	@Override
 	public ByteArrayOutputStream export() {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(baos), CSV_SEPARATOR)) {
-			for (Object key : cache.getKeys()) {
-				String keyText = (String) key;
-				Element element = cache.get(keyText);
-				Object value = element.getObjectValue();
-				String valueText = (String) value;
-				String[] strings = new String[] { keyText, valueText };
+			for (String key : map.keySet()) {
+				String valueText = this.getValue(key).get();
+				String[] strings = new String[] { key, valueText };
 				writer.writeNext(strings);
 			}
 		} catch (IOException e) {
@@ -56,6 +59,7 @@ public class CacheTool {
 		return baos;
 	}
 
+	@Override
 	public void importToCache(InputStream stream) {
 		try (CSVReader reader = new CSVReader(new InputStreamReader(stream), CSV_SEPARATOR)) {
 			List<String[]> lines = reader.readAll();
@@ -65,7 +69,7 @@ public class CacheTool {
 				}
 				String key = columns[0];
 				String value = columns[1];
-				cache.put(new Element(key, value));
+				this.put(key, value);
 			}
 		} catch (IOException e) {
 			throw new PoiException(e);
@@ -73,28 +77,23 @@ public class CacheTool {
 
 	}
 
-	public Optional<String> getByKey(String key) {
-		if (!cache.isKeyInCache(key)) {
-			return Optional.empty();
-		}
-		Element element = cache.get(key);
-		String objectValueAsStr = (String) element.getObjectValue();
-		return Optional.of(objectValueAsStr);
+	@Override
+	public boolean containsKey(String key) {
+		return map.containsKey(key);
 	}
 
+	@Override
+	public int getSize() {
+		return map.size();
+	}
+
+	@Override
 	public List<KeyVal> getAllRows() {
 		List<KeyVal> keyvals = new ArrayList<>();
 
-		for (Object key : cache.getKeys()) {
-			Element element = cache.get(key);
-			if (element == null) {
-				logger.warn("for key {} null in cache", key);
-				continue;
-			}
-			String keyText = (String) key;
-			Object value = element.getObjectValue();
-			String valueText = (String) value;
-			keyvals.add(new KeyVal(keyText, valueText));
+		for (String key : map.keySet()) {
+			String valueText = this.getValue(key).get();
+			keyvals.add(new KeyVal(key, valueText));
 		}
 		return keyvals;
 	}

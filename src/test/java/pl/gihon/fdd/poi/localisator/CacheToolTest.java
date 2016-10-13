@@ -13,7 +13,7 @@ import org.junit.Test;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-import pl.gihon.fdd.poi.localisator.google.CacheTool;
+import pl.gihon.fdd.poi.localisator.google.CacheToolEhCache;
 
 public class CacheToolTest {
 
@@ -34,7 +34,7 @@ public class CacheToolTest {
 
 	@Test
 	public void tool_canExport() throws IOException {
-		CacheTool tool = new CacheTool(testCache);
+		CacheToolEhCache tool = new CacheToolEhCache(testCache);
 		testCache.put(new Element("adr1", "{json1=a1, json11=a11}"));
 		testCache.put(new Element("adr2", "{json2=a2, json22=a22}"));
 
@@ -49,7 +49,7 @@ public class CacheToolTest {
 
 	@Test
 	public void tool_canImport() throws IOException {
-		CacheTool tool = new CacheTool(testCache);
+		CacheToolEhCache tool = new CacheToolEhCache(testCache);
 		String oneCsvLine = "\"adr1\";\"{json1=a1, json11=a11}\"";
 		String secondCsvLine = "\"adr2\";\"{json2=a2, json22=a22}\"";
 		String text = oneCsvLine + "\r\n" + secondCsvLine;

@@ -23,15 +23,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
 import pl.gihon.fdd.poi.exception.PoiException;
 import pl.gihon.fdd.poi.localisator.Localisator;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
 
 @Component
-public class GoogleLocalisator implements Localisator, Cacheable {
+public class GoogleLocalisator implements Localisator {
 
 	private static final Object GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 	@Value("${google.geocoding.sleep}")
@@ -39,13 +37,14 @@ public class GoogleLocalisator implements Localisator, Cacheable {
 	@Value("${google.api.key}")
 	private String googleApiKey;
 
-	private Cache cache;
 	private static Logger logger = LoggerFactory.getLogger(GoogleLocalisator.class);
 
+	private LocationCache locationCache;
+
 	@Autowired
-	public GoogleLocalisator(Cache cache) {
+	public GoogleLocalisator(LocationCache locationCache) {
 		super();
-		this.cache = cache;
+		this.locationCache = locationCache;
 	}
 
 	@Override
@@ -61,15 +60,15 @@ public class GoogleLocalisator implements Localisator, Cacheable {
 
 		try {
 			String locationText = "";
-			if (!cache.isKeyInCache(place.getFullAddress())) {
+			String key = place.getFullAddress();
+			if (!locationCache.containsKey(key)) {
 				logger.debug("Querying api for {}", place.getFullAddress());
 				locationText = queryApiForText(place);
-				cache.put(new Element(place.getFullAddress(), locationText));
+				locationCache.put(place.getFullAddress(), locationText);
 				Thread.sleep(sleepTime);
 			} else {
-				logger.debug("Found {} in cache", place.getFullAddress());
-				Element element = cache.get(place.getFullAddress());
-				locationText = (String) element.getObjectValue();
+				logger.debug("Found {} in cache", key);
+				locationText = locationCache.getValue(key).get();
 			}
 			GeocodingResponse response = mapResponse(locationText);
 			if (!response.getStatus().equals("OK")) {
@@ -121,19 +120,12 @@ public class GoogleLocalisator implements Localisator, Cacheable {
 		return responseText;
 	}
 
-	@Override
-	public boolean isInCache(String key) {
-		return cache.isKeyInCache(key);
-	}
-
-	@Override
 	public int cacheSize() {
-		return cache.getSize();
+		return locationCache.getSize();
 	}
 
-	@Override
 	public void clearCache() {
-		cache.removeAll();
+		locationCache.clear();
 	}
 
 }
