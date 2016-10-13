@@ -13,6 +13,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -38,6 +40,7 @@ public class GoogleLocalisator implements Localisator, Cacheable {
 	private String googleApiKey;
 
 	private Cache cache;
+	private static Logger logger = LoggerFactory.getLogger(GoogleLocalisator.class);
 
 	@Autowired
 	public GoogleLocalisator(Cache cache) {
@@ -59,18 +62,22 @@ public class GoogleLocalisator implements Localisator, Cacheable {
 		try {
 			String locationText = "";
 			if (!cache.isKeyInCache(place.getFullAddress())) {
+				logger.debug("Querying api for {}", place.getFullAddress());
 				locationText = queryApiForText(place);
 				cache.put(new Element(place.getFullAddress(), locationText));
 				Thread.sleep(sleepTime);
 			} else {
+				logger.debug("Found {} in cache", place.getFullAddress());
 				Element element = cache.get(place.getFullAddress());
 				locationText = (String) element.getObjectValue();
 			}
 			GeocodingResponse response = mapResponse(locationText);
 			if (!response.getStatus().equals("OK")) {
+				logger.error("status not OK, {}", response);
 				throw new GoogleLocalisatorException(place, response);
 			}
 			if (response.getResults().size() < 1) {
+				logger.error("no results found for {}", place);
 				throw new GoogleLocalisatorException(place, "no results found");
 			}
 
@@ -99,8 +106,9 @@ public class GoogleLocalisator implements Localisator, Cacheable {
 
 		CloseableHttpClient client = HttpClientBuilder.create().build();
 		HttpGet request = new HttpGet(sb.toString());
+		logger.debug("going to query api with request {}", request);
 		CloseableHttpResponse response = client.execute(request);
-
+		logger.debug("api returns response {}", response);
 		BufferedReader in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 		String inputLine;
 		StringBuffer responseTextBuffer = new StringBuffer();

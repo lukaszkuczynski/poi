@@ -61,7 +61,13 @@
 		</form>
 
 		<h1>locate</h1>
-		key=<span th:text="${apiPart}">apiPart</span>
+		<p>
+			key=<span th:text="${apiPart}">apiPart</span>
+		</p>
+		<p>
+			cache size: <span th:text="${cacheSize}">size of cach</span> 
+		</p>
+		
 		<form method="post" action="/locate">
 			<input type="submit" />
 		</form>

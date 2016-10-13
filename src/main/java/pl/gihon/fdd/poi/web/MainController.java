@@ -92,7 +92,7 @@ public class MainController {
 		modelAndView.addObject("areas", areas);
 		modelAndView.addObject("places", places);
 		modelAndView.addObject("apiPart", localisator.getStartOfApiKey());
-
+		modelAndView.addObject("cacheSize", localisator.cacheSize());
 		return modelAndView;
 	}
 
