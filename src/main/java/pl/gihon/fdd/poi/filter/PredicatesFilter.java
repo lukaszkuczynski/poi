@@ -17,7 +17,7 @@ public class PredicatesFilter implements Filter {
 
 	private List<PredicateForFilter> predicatesForFilter;
 
-	private static Logger LOGGER = LoggerFactory.getLogger(PredicateFilter.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(PredicatesFilter.class);
 
 	@Autowired
 	public PredicatesFilter(List<PredicateForFilter> predicatesForFilter) {
