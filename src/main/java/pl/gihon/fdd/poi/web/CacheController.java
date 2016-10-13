@@ -1,7 +1,11 @@
 package pl.gihon.fdd.poi.web;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import pl.gihon.fdd.poi.exception.PoiException;
 import pl.gihon.fdd.poi.localisator.google.CacheTool;
 
 @Controller
@@ -48,6 +53,22 @@ public class CacheController {
 	public String getCacheValue(@PathVariable("cacheKey") String key) {
 		Optional<String> valueOpt = cacheTool.getByKey(key);
 		return valueOpt.orElse("<no value>");
+	}
+
+	@PostMapping(value = "/export")
+	public void getFile(HttpServletResponse response) {
+		try {
+			ByteArrayOutputStream baos = cacheTool.export();
+			response.getOutputStream().write(baos.toByteArray());
+			String filename = "export_cache_" + new Date().toString() + ".csv";
+			response.setContentType("text/csv");
+			String disposition = "attachment; fileName=" + filename;
+			response.setHeader("Content-Disposition", disposition);
+			response.flushBuffer();
+		} catch (IOException ex) {
+			throw new PoiException("IOError writing file to output stream");
+		}
+
 	}
 
 }
