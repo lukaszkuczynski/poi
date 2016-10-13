@@ -29,6 +29,10 @@ public class Place {
 		return streetAndFlat;
 	}
 
+	public String getFullAddress() {
+		return city + ',' + streetAndFlat;
+	}
+
 	public String getCity() {
 		return city;
 	}

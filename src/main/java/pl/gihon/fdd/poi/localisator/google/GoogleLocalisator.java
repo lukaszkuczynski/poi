@@ -13,6 +13,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -20,19 +21,29 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectReader;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 import pl.gihon.fdd.poi.exception.PoiException;
 import pl.gihon.fdd.poi.localisator.Localisator;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
 
 @Component
-public class GoogleLocalisator implements Localisator {
+public class GoogleLocalisator implements Localisator, Cacheable {
 
 	private static final Object GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 	@Value("${google.geocoding.sleep}")
 	private int sleepTime;
 	@Value("${google.api.key}")
 	private String googleApiKey;
+
+	private Cache cache;
+
+	@Autowired
+	public GoogleLocalisator(Cache cache) {
+		super();
+		this.cache = cache;
+	}
 
 	@Override
 	public List<LocatedPlace> locate(List<Place> places) {
@@ -46,10 +57,16 @@ public class GoogleLocalisator implements Localisator {
 	private LocatedPlace locate(Place place) {
 
 		try {
-
-			String responseText = queryApiForText(place);
-			Thread.sleep(sleepTime);
-			GeocodingResponse response = mapResponse(responseText);
+			String locationText = "";
+			if (!cache.isKeyInCache(place.getFullAddress())) {
+				locationText = queryApiForText(place);
+				cache.put(new Element(place.getFullAddress(), locationText));
+				Thread.sleep(sleepTime);
+			} else {
+				Element element = cache.get(place.getFullAddress());
+				locationText = (String) element.getObjectValue();
+			}
+			GeocodingResponse response = mapResponse(locationText);
 			if (!response.getStatus().equals("OK")) {
 				throw new GoogleLocalisatorException(place, response);
 			}
@@ -94,6 +111,21 @@ public class GoogleLocalisator implements Localisator {
 		in.close();
 		String responseText = responseTextBuffer.toString();
 		return responseText;
+	}
+
+	@Override
+	public boolean isInCache(String key) {
+		return cache.isKeyInCache(key);
+	}
+
+	@Override
+	public int cacheSize() {
+		return cache.getSize();
+	}
+
+	@Override
+	public void clearCache() {
+		cache.removeAll();
 	}
 
 }
