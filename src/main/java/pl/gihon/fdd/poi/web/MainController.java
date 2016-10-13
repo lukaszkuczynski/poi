@@ -32,7 +32,7 @@ import pl.gihon.fdd.poi.validator.Validator;
 
 @RequestMapping(MainController.HOME_MAPPING)
 @Controller
-@SessionAttributes({ "areas", "locatedPlaces", "places", "unassignedPlaces" })
+@SessionAttributes({ "areas", "places", "unassignedPlaces" })
 public class MainController {
 	// TODO remove later on
 	static public List<LocatedPlace> placesPredefined = new ArrayList<>();
@@ -78,15 +78,10 @@ public class MainController {
 		return new ArrayList<>();
 	}
 
-	@ModelAttribute("locatedPlaces")
-	public List<LocatedPlace> locatedPlaces() {
-		return new ArrayList<>();
-	}
-
 	@ModelAttribute("unassignedPlaces")
 	public List<LocatedPlace> unassignedPlaces() {
-		return placesPredefined;
-		// return new ArrayList<>();
+		// return placesPredefined;
+		return new ArrayList<>();
 	}
 
 	@GetMapping("")
@@ -152,13 +147,11 @@ public class MainController {
 
 	@PostMapping("locate")
 	public RedirectView locate(@ModelAttribute("places") List<Place> places,
-			@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces, RedirectAttributes redirectAttributes) {
-
-		locatedPlaces.clear();
-		locatedPlaces.addAll(localisator.locate(places));
-		// unassignedPlaces.clear();
-		// TODO : located -> unassigned
-		String msg = String.format("%d places located", locatedPlaces.size());
+			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
+			RedirectAttributes redirectAttributes) {
+		unassignedPlaces.clear();
+		unassignedPlaces.addAll(localisator.locate(places));
+		String msg = String.format("%d places located, became 'unassigned places'", unassignedPlaces.size());
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
 
