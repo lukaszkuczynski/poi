@@ -3,6 +3,7 @@ package pl.gihon.fdd.poi.web;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletResponse;
@@ -36,6 +37,8 @@ public class CacheController {
 
 	@GetMapping
 	public String cache(Model model) {
+		List<KeyVal> keyvals = cacheTool.getAllRows();
+		model.addAttribute("rows", keyvals);
 		model.addAttribute("cacheSize", cacheTool.getCacheSize());
 		return "cache";
 	}
