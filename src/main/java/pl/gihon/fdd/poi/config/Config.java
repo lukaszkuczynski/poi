@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import pl.gihon.fdd.poi.filter.FilterMustNotLangs;
+import pl.gihon.fdd.poi.filter.FilterMustNotStatus;
 import pl.gihon.fdd.poi.importer.CsvImporter;
 import pl.gihon.fdd.poi.importer.Importer;
 import pl.gihon.fdd.poi.model.Place;
@@ -27,6 +28,8 @@ public class Config {
 
 	@Value("${LANGS_MUST_NOT}")
 	private String langsMustNot;
+	@Value("${STATUSES_MUST_NOT}")
+	private String statusesMustNot;
 
 	@Bean
 	Importer importer() {
@@ -43,6 +46,11 @@ public class Config {
 	@Bean
 	FilterMustNotLangs filterMustNotLangs() {
 		return new FilterMustNotLangs(langsMustNot, "langs_not");
+	}
+
+	@Bean
+	FilterMustNotStatus filterMustNotStatuses() {
+		return new FilterMustNotStatus(statusesMustNot, "statuses_not");
 	}
 
 	@Bean

@@ -2,11 +2,8 @@ package pl.gihon.fdd.poi.filter;
 
 import java.util.List;
 
-import org.springframework.stereotype.Component;
-
 import com.google.common.collect.Lists;
 
-@Component
 public class FilterMustNotLangs extends PredicateForFilter {
 
 	private List<String> langs;

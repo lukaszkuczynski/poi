@@ -30,10 +30,10 @@ public class FilterMustNotLangsContextTest extends ContextTest {
 
 	@Test
 	public void ioc_hasFilterDefined() {
-		Place urdiPlace = new Place();
+		Place urdiPlace = new Place(1L, "U", "U");
 		urdiPlace.setLang2("urdi");
 		urdiPlace.setLang1("");
-		Place americanPlace = new Place();
+		Place americanPlace = new Place(2L, "A", "A");
 		americanPlace.setLang1("english");
 		americanPlace.setLang2("other");
 		List<Place> places = Lists.newArrayList(urdiPlace, americanPlace);
