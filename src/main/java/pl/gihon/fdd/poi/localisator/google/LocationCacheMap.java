@@ -74,7 +74,6 @@ public class LocationCacheMap implements LocationCache {
 		} catch (IOException e) {
 			throw new PoiException(e);
 		}
-
 	}
 
 	@Override

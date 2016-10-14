@@ -3,16 +3,17 @@ package pl.gihon.fdd.poi.config;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.servlet.MultipartConfigElement;
+
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.common.collect.Lists;
 
-import pl.gihon.fdd.poi.filter.PredicateForFilter;
+import pl.gihon.fdd.poi.filter.FilterMustNotLangs;
 import pl.gihon.fdd.poi.importer.CsvImporter;
 import pl.gihon.fdd.poi.importer.Importer;
-import pl.gihon.fdd.poi.localisator.EmptyLocalistor;
-import pl.gihon.fdd.poi.localisator.Localisator;
 import pl.gihon.fdd.poi.model.Place;
 import pl.gihon.fdd.poi.validator.PredicateValidator;
 import pl.gihon.fdd.poi.validator.SinglePlaceValidator;
@@ -48,29 +49,16 @@ public class TestingConfig {
 	}
 
 	@Bean
-	PredicateForFilter filterHavingKeyKey() {
-		Predicate<Place> predicate = p -> p.getKey().equals("key");
-		PredicateForFilter predicateForFilter = new PredicateForFilter(predicate, "key is key");
-		return predicateForFilter;
+	FilterMustNotLangs filterNonsens() {
+		return new FilterMustNotLangs("zczxcz", "zczczx");
 	}
 
 	@Bean
-	PredicateForFilter filterHavingSmallId() {
-		Predicate<Place> predicate = p -> p.getId() < 20;
-		PredicateForFilter predicateForFilter = new PredicateForFilter(predicate, "id < 20");
-		return predicateForFilter;
-	}
-
-	@Bean
-	PredicateForFilter filterNotRomanian() {
-		Predicate<Place> predicate = p -> !p.getLang1().contains("Romanian");
-		PredicateForFilter predicateForFilter = new PredicateForFilter(predicate, "not Romanian");
-		return predicateForFilter;
-	}
-
-	@Bean
-	Localisator localisator() {
-		return new EmptyLocalistor();
+	public MultipartConfigElement multipartConfigElement() {
+		MultipartConfigFactory factory = new MultipartConfigFactory();
+		factory.setMaxFileSize("10MB");
+		factory.setMaxRequestSize("10MB");
+		return factory.createMultipartConfig();
 	}
 
 }
