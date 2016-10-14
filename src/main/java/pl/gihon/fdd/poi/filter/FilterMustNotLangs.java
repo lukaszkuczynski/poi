@@ -1,10 +1,27 @@
 package pl.gihon.fdd.poi.filter;
 
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+
+import com.google.common.collect.Lists;
+
+@Component
 public class FilterMustNotLangs extends PredicateForFilter {
 
+	private List<String> langs;
+
 	public FilterMustNotLangs(String langsNot, String name) {
-		super(p -> !p.getLang1().toLowerCase().contains(langsNot.toLowerCase())
-				&& !p.getLang2().toLowerCase().contains(langsNot.toLowerCase()), name);
+		super(name);
+		this.langs = Lists.newArrayList(langsNot.split(","));
+		this.predicate = p -> {
+			boolean matches = true;
+			for (String langNot : langs) {
+				matches &= !p.getLang1().toLowerCase().contains(langNot.toLowerCase())
+						&& !p.getLang2().toLowerCase().contains(langNot.toLowerCase());
+			}
+			return matches;
+		};
 	}
 
 }

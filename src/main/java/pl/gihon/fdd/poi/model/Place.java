@@ -13,8 +13,8 @@ public class Place {
 	private String otherHost;
 	private String status;
 	private Date lastMet;
-	private String lang1;
-	private String lang2;
+	private String lang1 = "";
+	private String lang2 = "";
 	private String other_rl;
 	private String key;
 	private String latitude;

@@ -1,15 +1,13 @@
 package pl.gihon.fdd.poi.config;
 
-import java.util.List;
 import java.util.function.Predicate;
 
 import javax.servlet.MultipartConfigElement;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import com.google.common.collect.Lists;
 
 import pl.gihon.fdd.poi.filter.FilterMustNotLangs;
 import pl.gihon.fdd.poi.importer.CsvImporter;
@@ -25,20 +23,14 @@ import pl.gihon.fdd.poi.validator.SinglePlaceValidator;
  *
  */
 @Configuration
-public class TestingConfig {
+public class Config {
 
-	private List<String> validCities = Lists.newArrayList("Konin");
+	@Value("${LANGS_MUST_NOT}")
+	private String langsMustNot;
 
 	@Bean
 	Importer importer() {
 		return new CsvImporter();
-	}
-
-	@Bean
-	SinglePlaceValidator validatorCityNameInArray() {
-		Predicate<Place> predicate = p -> validCities.contains(p.getCity());
-		PredicateValidator predicateValidator = new PredicateValidator(predicate, "validatorCityNameInArray");
-		return predicateValidator;
 	}
 
 	@Bean
@@ -49,12 +41,12 @@ public class TestingConfig {
 	}
 
 	@Bean
-	FilterMustNotLangs filterNonsens() {
-		return new FilterMustNotLangs("zczxcz", "zczczx");
+	FilterMustNotLangs filterMustNotLangs() {
+		return new FilterMustNotLangs(langsMustNot, "langs_not");
 	}
 
 	@Bean
-	public MultipartConfigElement multipartConfigElement() {
+	MultipartConfigElement multipartConfigElement() {
 		MultipartConfigFactory factory = new MultipartConfigFactory();
 		factory.setMaxFileSize("10MB");
 		factory.setMaxRequestSize("10MB");

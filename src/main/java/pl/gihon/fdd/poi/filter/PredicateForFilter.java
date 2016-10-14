@@ -6,12 +6,17 @@ import pl.gihon.fdd.poi.model.Place;
 
 public class PredicateForFilter {
 
-	private Predicate<Place> predicate;
+	protected Predicate<Place> predicate;
 	private String name;
 
 	public PredicateForFilter(Predicate<Place> predicate, String name) {
 		super();
 		this.predicate = predicate;
+		this.name = name;
+	}
+
+	public PredicateForFilter(String name) {
+		super();
 		this.name = name;
 	}
 
