@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
+import pl.gihon.fdd.poi.printer.googlemymaps.CsvPlacePrinter;
 
 public class CsvPlacePrinterTestIntegration {
 

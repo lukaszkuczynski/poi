@@ -1,6 +1,8 @@
 package pl.gihon.fdd.poi.web;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +31,7 @@ import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
 import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
+import pl.gihon.fdd.poi.printer.googlemymaps.CsvPlacePrinter;
 import pl.gihon.fdd.poi.validator.ValidationException;
 import pl.gihon.fdd.poi.validator.Validator;
 
@@ -180,6 +183,19 @@ public class MainController {
 		areaCandidate.get().addPlace(place);
 		int indexOf = unassignedPlaces.indexOf(place);
 		unassignedPlaces.remove(indexOf);
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("print/mymaps")
+	public RedirectView printToMyMaps(@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
+			@ModelAttribute("areas") List<Area> areas, RedirectAttributes redirectAttributes) throws IOException {
+		String file = Files.createTempFile("mymaps", ".csv").toFile().getAbsolutePath();
+		CsvPlacePrinter myMapsPrinter = new CsvPlacePrinter(file);
+		myMapsPrinter.printWithUnassigned(areas, unassignedPlaces);
+		String msg = String.format("%d areas and %d unassigned places printed to file at %s", areas.size(),
+				unassignedPlaces.size(), file);
+		LOGGER.info(msg);
+		redirectAttributes.addFlashAttribute("message", msg);
 		return HOME_REDIRECT;
 	}
 

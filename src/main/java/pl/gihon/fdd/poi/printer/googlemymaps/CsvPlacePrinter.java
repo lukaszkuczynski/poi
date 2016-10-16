@@ -1,4 +1,4 @@
-package pl.gihon.fdd.poi.printer;
+package pl.gihon.fdd.poi.printer.googlemymaps;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
+import pl.gihon.fdd.poi.printer.Printer;
 
 /**
  * prints csv readable by google my maps import CSV

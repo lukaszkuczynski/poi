@@ -1,20 +1,21 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-	<title>Getting Started: Serving Web Content</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"	integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
+<title>Getting Started: Serving Web Content</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
+	integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
 	crossorigin="anonymous"></script>
-	
-	<script>
-		$('document').ready(function() {
-			$('button#prephase_visible').click(function() {
-				//$('#prephase').toggle();
-			});
-			
-			$('button#prephase_visible').click();
+
+<script>
+	$('document').ready(function() {
+		$('button#prephase_visible').click(function() {
+			//$('#prephase').toggle();
 		});
-	</script>
+
+		$('button#prephase_visible').click();
+	});
+</script>
 </head>
 
 <body>
@@ -56,46 +57,65 @@
 		</form>
 
 		<h1>filter</h1>
-		
+
 		<h2>Available filters</h2>
 		<ul>
 			<li th:each="filter : ${filters}" th:text="${filter}">filter</li>
 		</ul>
-		
+
 		<form method="post" action="/filter">
 			<input type="submit" />
 		</form>
-		
+
 		<div id="excluded" th:if="${not #lists.isEmpty(exclusions)}">
 			<h3>Excluded</h3>
 			<div class="filter-exclusions" th:each="exc : ${exclusions}">
-				<h4>filter was "<span th:text="${exc.filter}"></span>"</h4>
+				<h4>
+					filter was "<span th:text="${exc.filter}"></span>"
+				</h4>
 				<ul>
 					<li th:each="place : ${exc.places}" th:text="${place}">place</li>
 				</ul>
-				
+
 			</div>
-		</div>			
+		</div>
 
 		<h1>locate</h1>
 		<p>
 			key=<span th:text="${apiPart}">apiPart</span>
 		</p>
 		<p>
-			cache size: <span th:text="${cacheSize}">size of cach</span> 
+			cache size: <span th:text="${cacheSize}">size of cach</span>
 		</p>
-		
+
 		<form method="post" action="/locate">
 			<input type="submit" />
 		</form>
 	</div>
 
+	<h1>unassigned places upload</h1>
+	<div>
+		<form method="POST" enctype="multipart/form-data" action="/upload/unassigned">
+			<table>
+				<tr>
+					<td>File to upload:</td>
+					<td><input type="file" name="file" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" value="Upload" /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+
 	<h1>areas</h1>
 	<h2>add new area</h2>
 	<form method="post" action="/area">
-		<label for="nr">nr</label> <input name="nr" th:value="${suggestedAreaNr}"/>
-		<label for="name">name</label> <input name="name"/> 
-		<input type="submit" />
+		<label for="nr">nr</label> <input name="nr"
+			th:value="${suggestedAreaNr}" /> <label for="name">name</label> <input
+			name="name" /> <input type="submit" />
 	</form>
 
 	<div class="area" th:each="area : ${areas}">
@@ -103,21 +123,25 @@
 		<label th:text="'area name ' + ${area.name} + ' nr '+ ${area.nr}"></label>
 		<form action="/area/assign-place" method="post">
 			<label for="id">place id</label><input type="number" name="placeId" />
-			<input type="hidden" name="areaNr" th:value="${area.nr}" />			
+			<input type="hidden" name="areaNr" th:value="${area.nr}" />
 		</form>
 		<h3>list of places</h3>
 		<div class="place_in_area" th:each="place : ${area.places}">
 			<label th:text="${place.id}"></label>
 		</div>
-		
 	</div>
+	<h3>Export</h3>
+	<form action="/print/mymaps" method="post">
+		<button type="submit">Export</button>
+	</form>
+
 
 	<h1>unassigned places</h1>
 
 	<div id="unassignedPlaces">
 		<div class="unassignedPlace" th:each="place : ${unassignedPlaces}">
-			<span>place </span> <span th:text="${place.streetAndFlat}"/>
-			<span>id</span> <span th:text="${place.id}">id</span>
+			<span>place </span> <span th:text="${place.streetAndFlat}" /> <span>id</span>
+			<span th:text="${place.id}">id</span>
 		</div>
 	</div>
 
