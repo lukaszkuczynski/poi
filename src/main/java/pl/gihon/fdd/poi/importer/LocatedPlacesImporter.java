@@ -1,0 +1,46 @@
+package pl.gihon.fdd.poi.importer;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.dataformat.csv.CsvMapper;
+import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+
+import pl.gihon.fdd.poi.exception.PoiException;
+import pl.gihon.fdd.poi.model.LocatedPlace;
+import pl.gihon.fdd.poi.model.Place;
+import pl.gihon.fdd.poi.printer.googlemymaps.AssignedPlace;
+
+public class LocatedPlacesImporter {
+
+	private static final char DEFAULT_COLUMN_SEPARATOR = ',';
+	private char columnSeparator = DEFAULT_COLUMN_SEPARATOR;
+
+	public List<LocatedPlace> importFromMyMapsExportFile(File file) {
+		try {
+			List<AssignedPlace> assigned = loadAssignedPlaces(file);
+			List<LocatedPlace> located = assigned.stream().map(ap -> assignedToLocated(ap))
+					.collect(Collectors.toList());
+			return located;
+		} catch (IOException e) {
+			throw new PoiException(e);
+		}
+	}
+
+	private List<AssignedPlace> loadAssignedPlaces(File file) throws JsonProcessingException, IOException {
+		CsvMapper mapper = new CsvMapper();
+		CsvSchema schema = mapper.schemaFor(AssignedPlace.class).withColumnSeparator(columnSeparator).withHeader();
+		MappingIterator<AssignedPlace> readValues = mapper.readerFor(AssignedPlace.class).with(schema).readValues(file);
+		return readValues.readAll();
+	}
+
+	private LocatedPlace assignedToLocated(AssignedPlace ap) {
+		// FIXME: it doesnt work good, needed better place creation
+		return new LocatedPlace(ap.getLatitude(), ap.getLongitude(),
+				new Place(ap.getId(), ap.getStreetAndFlat(), ap.getCity()));
+	}
+}

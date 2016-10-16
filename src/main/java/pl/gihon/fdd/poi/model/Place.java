@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({ "id", "city", "streetAndFlat", "otherHost", "status", "lastMet", "lang1", "lang2", "other_rl",
 		"key", "latitude", "longitude", "test" })
 public class Place {
-	private long id;
-	private String city;
-	private String streetAndFlat;
+	protected long id;
+	protected String city;
+	protected String streetAndFlat;
 	private String otherHost;
 	private String status = "";
 	private Date lastMet;
