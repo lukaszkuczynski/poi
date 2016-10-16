@@ -65,6 +65,17 @@
 		<form method="post" action="/filter">
 			<input type="submit" />
 		</form>
+		
+		<div id="excluded" th:if="${not #lists.isEmpty(exclusions)}">
+			<h3>Excluded</h3>
+			<div class="filter-exclusions" th:each="exc : ${exclusions}">
+				<h4>filter was "<span th:text="${exc.filter}"></span>"</h4>
+				<ul>
+					<li th:each="place : ${exc.places}" th:text="${place}">place</li>
+				</ul>
+				
+			</div>
+		</div>			
 
 		<h1>locate</h1>
 		<p>

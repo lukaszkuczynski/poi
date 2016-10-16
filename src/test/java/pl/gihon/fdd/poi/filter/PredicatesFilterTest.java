@@ -20,10 +20,13 @@ public class PredicatesFilterTest {
 		List<PredicateForFilter> predicates = Lists.newArrayList(idPositive, streetSt1, cityIsKonin);
 		Filter filter = new PredicatesFilter(predicates);
 
-		List<Place> places = Lists.newArrayList(new Place(-1, "st1", "Konin"), new Place(1, "st1", "Konin"),
+		List<Place> places = Lists.newArrayList(new Place(-1, "st2", "Konin"), new Place(1, "st1", "Konin"),
 				new Place(2, "st1", "Mierzejewo"));
 
 		List<Place> filtered = filter.filter(places);
+
+		List<ExcludedForFilter> exclusions = filter.getExclusions();
+		System.out.println(exclusions);
 
 		assertThat(filtered).hasSize(1);
 	}

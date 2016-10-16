@@ -28,4 +28,9 @@ public class PredicateForFilter {
 		return name;
 	}
 
+	@Override
+	public String toString() {
+		return "PredicateForFilter [name=" + name + "]";
+	}
+
 }

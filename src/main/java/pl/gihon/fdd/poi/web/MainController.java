@@ -20,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import pl.gihon.fdd.poi.filter.ExcludedForFilter;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.filter.PredicateForFilter;
 import pl.gihon.fdd.poi.importer.Importer;
@@ -143,6 +144,9 @@ public class MainController {
 		String msg = String.format("Places filtered, before %d, after %d", places.size(), matching.size());
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
+
+		List<ExcludedForFilter> exclusions = filter.getExclusions();
+		redirectAttributes.addFlashAttribute("exclusions", exclusions);
 
 		places.clear();
 		places.addAll(matching);

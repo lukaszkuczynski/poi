@@ -103,7 +103,8 @@ public class Place {
 
 	@Override
 	public String toString() {
-		return "Place [id=" + id + ", city=" + city + ", streetAndFlat=" + streetAndFlat + "]";
+		return "Place [id=" + id + ", city=" + city + ", streetAndFlat=" + streetAndFlat + ", status=" + status
+				+ ", lang1=" + lang1 + ", lang2=" + lang2 + "]";
 	}
 
 	@Override
