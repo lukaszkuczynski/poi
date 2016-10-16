@@ -34,7 +34,7 @@ public class GoogleLocalisator implements Localisator {
 	private static final Object GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json?";
 	@Value("${google.geocoding.sleep}")
 	private int sleepTime;
-	@Value("${google.api.key}")
+	@Value("${GOOGLE_API_KEY}")
 	private String googleApiKey;
 
 	private static Logger logger = LoggerFactory.getLogger(GoogleLocalisator.class);
@@ -64,7 +64,6 @@ public class GoogleLocalisator implements Localisator {
 			if (!locationCache.containsKey(key)) {
 				logger.debug("Querying api for {}", place.getFullAddress());
 				locationText = queryApiForText(place);
-				locationCache.put(place.getFullAddress(), locationText);
 				Thread.sleep(sleepTime);
 			} else {
 				logger.debug("Found {} in cache", key);
@@ -78,6 +77,10 @@ public class GoogleLocalisator implements Localisator {
 			if (response.getResults().size() < 1) {
 				logger.error("no results found for {}", place);
 				throw new GoogleLocalisatorException(place, "no results found");
+			}
+
+			if (!locationCache.containsKey(key)) {
+				locationCache.put(place.getFullAddress(), locationText);
 			}
 
 			Location location = response.getResults().get(0).getGeometry().getLocation();

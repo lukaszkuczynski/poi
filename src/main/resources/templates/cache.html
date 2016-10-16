@@ -20,12 +20,9 @@
 		</form>
 	</div>
 	
-	<table>
-	
-		<tr th:each="row : ${rows}">
-			<td th:text="${row.key}"></td><td th:text="${row.val}"/>
-		</tr>
-	</table>
+	<ul>
+		<li th:each="row : ${rows}" th:text="${row.key}"> </li>
+	</ul>
 
 	<div>
 		<form method="POST" action="/cache/export">
