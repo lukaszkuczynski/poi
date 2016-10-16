@@ -56,6 +56,12 @@
 		</form>
 
 		<h1>filter</h1>
+		
+		<h2>Available filters</h2>
+		<ul>
+			<li th:each="filter : ${filters}" th:text="${filter}">filter</li>
+		</ul>
+		
 		<form method="post" action="/filter">
 			<input type="submit" />
 		</form>

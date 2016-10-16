@@ -21,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import pl.gihon.fdd.poi.filter.Filter;
+import pl.gihon.fdd.poi.filter.PredicateForFilter;
 import pl.gihon.fdd.poi.importer.Importer;
 import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
@@ -58,6 +59,9 @@ public class MainController {
 	@Autowired
 	private GoogleLocalisator localisator;
 
+	@Autowired
+	private List<PredicateForFilter> filters;
+
 	{
 		Place place1 = new Place(1, "Wielka 1", "Poznan");
 		LocatedPlace pl1 = new LocatedPlace("41", "11", place1);
@@ -93,6 +97,7 @@ public class MainController {
 		modelAndView.addObject("places", places);
 		modelAndView.addObject("apiPart", localisator.getStartOfApiKey());
 		modelAndView.addObject("cacheSize", localisator.cacheSize());
+		modelAndView.addObject("filters", filters);
 		return modelAndView;
 	}
 

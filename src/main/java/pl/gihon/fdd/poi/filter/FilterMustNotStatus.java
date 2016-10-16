@@ -8,8 +8,11 @@ public class FilterMustNotStatus extends PredicateForFilter {
 
 	private List<String> statuses;
 
+	private String statusesNot;
+
 	public FilterMustNotStatus(String statusesNot, String name) {
 		super(name);
+		this.statusesNot = statusesNot;
 		this.statuses = Lists.newArrayList(statusesNot.split(","));
 		this.predicate = p -> {
 			boolean matches = true;
@@ -18,6 +21,11 @@ public class FilterMustNotStatus extends PredicateForFilter {
 			}
 			return matches;
 		};
+	}
+
+	@Override
+	public String toString() {
+		return "FilterMustNotStatus [statusesNot=" + statusesNot + ", getName()=" + getName() + "]";
 	}
 
 }
