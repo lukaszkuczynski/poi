@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import pl.gihon.fdd.poi.printer.AreasHelper;
+import pl.gihon.fdd.poi.AreasHelper;
 
 public class PyJsonPrinterTestIntegration {
 

@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
+import pl.gihon.fdd.poi.PlaceHelper;
 import pl.gihon.fdd.poi.model.Place;
 
 public class PredicateValidatorTest {
@@ -20,7 +21,7 @@ public class PredicateValidatorTest {
 		List<String> validCities = Lists.newArrayList("Konin", "Mrągowo");
 		Predicate<Place> cityIsInArray = p -> validCities.contains(p.getCity());
 		PredicateValidator predicateValidator = new PredicateValidator(cityIsInArray, "city name is in array");
-		Place place = new Place(1L, "St1", "Mrągowo");
+		Place place = PlaceHelper.simple(1L, "St1", "Mrągowo");
 
 		// when
 		ValidationResult validationResult = predicateValidator.validate(place);
@@ -36,7 +37,7 @@ public class PredicateValidatorTest {
 		List<String> validCities = Lists.newArrayList("Konin", "Mrągowo");
 		Predicate<Place> cityIsInArray = p -> validCities.contains(p.getCity());
 		PredicateValidator predicateValidator = new PredicateValidator(cityIsInArray, "city name is in array");
-		Place place = new Place(1L, "St1", "Brzeźno");
+		Place place = PlaceHelper.simple(1L, "St1", "Brzeźno");
 
 		// when
 		ValidationResult validationResult = predicateValidator.validate(place);

@@ -37,6 +37,7 @@ public class CsvPlacePrinter implements Printer {
 		CsvSchema schema = mapper.schemaFor(AssignedPlace.class).withColumnSeparator(columnSeparator).withHeader();
 		SequenceWriter writeValues = mapper.writerFor(AssignedPlace.class).with(schema).writeValues(file);
 		writeValues.writeAll(assignedPlaces);
+		writeValues.flush();
 	}
 
 	private List<AssignedPlace> areasToList(List<Area> areas) {

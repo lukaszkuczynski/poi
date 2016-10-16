@@ -26,6 +26,7 @@ import pl.gihon.fdd.poi.filter.ExcludedForFilter;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.filter.PredicateForFilter;
 import pl.gihon.fdd.poi.importer.Importer;
+import pl.gihon.fdd.poi.importer.LocatedPlacesImporter;
 import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
 import pl.gihon.fdd.poi.model.Area;
@@ -39,8 +40,6 @@ import pl.gihon.fdd.poi.validator.Validator;
 @Controller
 @SessionAttributes({ "areas", "places", "unassignedPlaces" })
 public class MainController {
-	// TODO remove later on
-	static public List<LocatedPlace> placesPredefined = new ArrayList<>();
 
 	@ModelAttribute("places")
 	private List<Place> places() {
@@ -62,24 +61,11 @@ public class MainController {
 	private Filter filter;
 	@Autowired
 	private GoogleLocalisator localisator;
+	@Autowired
+	private LocatedPlacesImporter locatedPlacesImporter;
 
 	@Autowired
 	private List<PredicateForFilter> filters;
-
-	{
-		Place place1 = new Place(1, "Wielka 1", "Poznan");
-		LocatedPlace pl1 = new LocatedPlace("41", "11", place1);
-		placesPredefined.add(pl1);
-		Place place2 = new Place(2, "Wielka 23", "Poznan");
-		LocatedPlace pl2 = new LocatedPlace("32", "5", place2);
-		placesPredefined.add(pl2);
-		Place place3 = new Place(3, "Srubowa 3", "Koni");
-		LocatedPlace pl3 = new LocatedPlace("45", "14", place3);
-		placesPredefined.add(pl3);
-		Place place4 = new Place(4, "Szczególna 23", "Dziębieżewo");
-		LocatedPlace pl4 = new LocatedPlace("56", "23", place4);
-		placesPredefined.add(pl4);
-	}
 
 	@ModelAttribute("areas")
 	public List<Area> areas() {
@@ -194,6 +180,22 @@ public class MainController {
 		myMapsPrinter.printWithUnassigned(areas, unassignedPlaces);
 		String msg = String.format("%d areas and %d unassigned places printed to file at %s", areas.size(),
 				unassignedPlaces.size(), file);
+		LOGGER.info(msg);
+		redirectAttributes.addFlashAttribute("message", msg);
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("upload/mymaps")
+	public RedirectView uploadFromMyMaps(@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
+			RedirectAttributes redirectAttributes, MultipartFile file) throws IOException {
+
+		File tempUploaded = Files.createTempFile("uploaded_mymaps", ".csv").toFile();
+		file.transferTo(tempUploaded);
+		List<LocatedPlace> readUnassignedPlaces = locatedPlacesImporter.importFromMyMapsExportFile(tempUploaded);
+		unassignedPlaces.clear();
+		unassignedPlaces.addAll(readUnassignedPlaces);
+		String msg = String.format("From uploaded file I have read %d unassigned places, path %s",
+				unassignedPlaces.size(), tempUploaded.getAbsolutePath());
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
 		return HOME_REDIRECT;

@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -15,6 +17,7 @@ import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
 import pl.gihon.fdd.poi.printer.googlemymaps.AssignedPlace;
 
+@Component
 public class LocatedPlacesImporter {
 
 	private static final char DEFAULT_COLUMN_SEPARATOR = ',';
@@ -39,8 +42,7 @@ public class LocatedPlacesImporter {
 	}
 
 	private LocatedPlace assignedToLocated(AssignedPlace ap) {
-		// FIXME: it doesnt work good, needed better place creation
-		return new LocatedPlace(ap.getLatitude(), ap.getLongitude(),
-				new Place(ap.getId(), ap.getStreetAndFlat(), ap.getCity()));
+		return new LocatedPlace(ap.getLatitude(), ap.getLongitude(), new Place(ap.getId(), ap.getStreetAndFlat(),
+				ap.getCity(), ap.getLang1(), ap.getLang2(), ap.getLastMet(), ap.getStatus()));
 	}
 }

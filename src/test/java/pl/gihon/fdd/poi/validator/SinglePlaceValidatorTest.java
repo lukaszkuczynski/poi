@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
 
+import pl.gihon.fdd.poi.PlaceHelper;
 import pl.gihon.fdd.poi.model.Place;
 
 public class SinglePlaceValidatorTest {
@@ -13,7 +14,7 @@ public class SinglePlaceValidatorTest {
 	@Test
 	public void singleValidator_givenValidPlace_returnInfoValid() {
 		// given
-		Place place = new Place(1L, "street", "Konin");
+		Place place = PlaceHelper.simple(1L, "street", "Konin");
 
 		// when
 		ValidationResult validationResult = validator.validate(place);
@@ -26,7 +27,7 @@ public class SinglePlaceValidatorTest {
 	@Test
 	public void singleValidator_givenInvalidPlace_returnInfoInvalidWithTextError() {
 		// given
-		Place place = new Place(1L, "street", "Konina");
+		Place place = PlaceHelper.simple(1L, "street", "Konina");
 
 		// when
 		ValidationResult validationResult = validator.validate(place);

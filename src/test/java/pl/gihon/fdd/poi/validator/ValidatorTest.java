@@ -8,6 +8,7 @@ import java.util.List;
 import org.assertj.core.util.Lists;
 import org.junit.Test;
 
+import pl.gihon.fdd.poi.PlaceHelper;
 import pl.gihon.fdd.poi.model.Place;
 
 public class ValidatorTest {
@@ -16,7 +17,8 @@ public class ValidatorTest {
 	public void validator_givenValidPlaces_throwsNothing() {
 		List<SinglePlaceValidator> validators = Lists.newArrayList(new KoninSingleValidator());
 		Validator validator = new StandardValidator(validators);
-		List<Place> places = Lists.newArrayList(new Place(1L, "street 1", "Konin"), new Place(2L, "street 2", "Konin"));
+		List<Place> places = Lists.newArrayList(PlaceHelper.simple(1L, "street 1", "Konin"),
+				PlaceHelper.simple(2L, "street 2", "Konin"));
 		// TODO: google catch excpetion gives error
 		/// java.lang.NoClassDefFoundError:
 		// org/mockito/internal/creation/MockitoMethodProxy
@@ -36,8 +38,8 @@ public class ValidatorTest {
 	public void validator_givenInvalidPlace_throwsException() {
 		List<SinglePlaceValidator> validators = Lists.newArrayList(new KoninSingleValidator());
 		Validator validator = new StandardValidator(validators);
-		Place validPlace = new Place(1L, "street 1", "Konin");
-		Place INvalidPlace = new Place(1L, "street 1", "Konina");
+		Place validPlace = PlaceHelper.simple(1L, "street 1", "Konin");
+		Place INvalidPlace = PlaceHelper.simple(1L, "street 1", "Konina");
 
 		List<Place> places = Lists.newArrayList(validPlace, INvalidPlace);
 

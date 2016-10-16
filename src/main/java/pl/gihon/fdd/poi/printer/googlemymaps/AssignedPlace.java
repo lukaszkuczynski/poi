@@ -23,7 +23,8 @@ public class AssignedPlace extends LocatedPlace {
 	}
 
 	AssignedPlace(LocatedPlace p, Long areaNr) {
-		super(p.getLatitude(), p.getLongitude(), new Place(p.getId(), p.getStreetAndFlat(), p.getCity()));
+		super(p.getLatitude(), p.getLongitude(), new Place(p.getId(), p.getStreetAndFlat(), p.getCity(), p.getLang1(),
+				p.getLang2(), p.getLastMet(), p.getStatus()));
 		this.areaNr = areaNr;
 	}
 }

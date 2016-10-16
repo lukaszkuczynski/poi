@@ -6,8 +6,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import pl.gihon.fdd.poi.AreasHelper;
+import pl.gihon.fdd.poi.PlaceHelper;
 import pl.gihon.fdd.poi.model.LocatedPlace;
-import pl.gihon.fdd.poi.model.Place;
 import pl.gihon.fdd.poi.printer.googlemymaps.CsvPlacePrinter;
 
 public class CsvPlacePrinterTestIntegration {
@@ -25,9 +26,9 @@ public class CsvPlacePrinterTestIntegration {
 		CsvPlacePrinter csvPlacePrinter = new CsvPlacePrinter("d:\\temp\\aaunas.csv");
 
 		List<LocatedPlace> sadUnassignedLonelyPlaces = new ArrayList<>();
-		sadUnassignedLonelyPlaces.add(new LocatedPlace("", "", new Place(5L, "Grójecka 1", "Warszawa")));
-		sadUnassignedLonelyPlaces.add(new LocatedPlace("", "", new Place(6L, "Kowalska 1", "Warszawa")));
-		sadUnassignedLonelyPlaces.add(new LocatedPlace("", "", new Place(7L, "Podmiejska 1", "Warszawa")));
+		sadUnassignedLonelyPlaces.add(new LocatedPlace("", "", PlaceHelper.simple(5L, "Grójecka 1", "Warszawa")));
+		sadUnassignedLonelyPlaces.add(new LocatedPlace("", "", PlaceHelper.simple(6L, "Kowalska 1", "Warszawa")));
+		sadUnassignedLonelyPlaces.add(new LocatedPlace("", "", PlaceHelper.simple(7L, "Podmiejska 1", "Warszawa")));
 
 		csvPlacePrinter.printWithUnassigned(AreasHelper.areas(), sadUnassignedLonelyPlaces);
 

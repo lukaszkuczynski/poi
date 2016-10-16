@@ -3,14 +3,13 @@ package pl.gihon.fdd.poi.model;
 public class LocatedPlace extends Place {
 	private String latitude;
 	private String longitude;
-	private Place place;
 
 	// TODO: remove Place, this should be the only Place! with flag isLocated()
 	public LocatedPlace(String latitude, String longitude, Place place) {
-		super(place.getId(), place.getStreetAndFlat(), place.getCity());
-		this.id = place.getId();
-		this.city = place.getCity();
-		this.streetAndFlat = place.getStreetAndFlat();
+		// long id, String streetAndFlat, String city, String lang1, String
+		// lang2, Date lastMet, String status
+		super(place.getId(), place.getStreetAndFlat(), place.getCity(), place.getLang1(), place.getLang2(),
+				place.getLastMet(), place.getStatus());
 		this.latitude = latitude;
 		this.longitude = longitude;
 	}
@@ -27,18 +26,6 @@ public class LocatedPlace extends Place {
 	public String getLongitude() {
 		return longitude;
 	}
-
-	// public long getId() {
-	// return place.getId();
-	// }
-	//
-	// public String getStreetAndFlat() {
-	// return place.getStreetAndFlat();
-	// }
-	//
-	// public String getCity() {
-	// return place.getCity();
-	// }
 
 	@Override
 	public String toString() {

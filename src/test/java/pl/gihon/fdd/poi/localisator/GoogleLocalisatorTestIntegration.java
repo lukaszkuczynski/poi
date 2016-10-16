@@ -9,7 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 
-import pl.gihon.fdd.poi.ContextTest;
+import pl.gihon.fdd.poi.GoogleApiContextTest;
+import pl.gihon.fdd.poi.PlaceHelper;
 import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
 import pl.gihon.fdd.poi.localisator.google.LocationCache;
 import pl.gihon.fdd.poi.model.LocatedPlace;
@@ -21,7 +22,7 @@ import pl.gihon.fdd.poi.model.Place;
  * @author luk
  *
  */
-public class GoogleLocalisatorTestIntegration extends ContextTest {
+public class GoogleLocalisatorTestIntegration extends GoogleApiContextTest {
 
 	@Autowired
 	private GoogleLocalisator localisator;
@@ -29,7 +30,7 @@ public class GoogleLocalisatorTestIntegration extends ContextTest {
 	private LocationCache locationCache;
 
 	private static List<Place> placesWithCityAndStreet(String city, String street) {
-		Place place = new Place(1, street, city);
+		Place place = PlaceHelper.simple(1, street, city);
 		List<Place> places = Lists.newArrayList(place);
 		return places;
 	}

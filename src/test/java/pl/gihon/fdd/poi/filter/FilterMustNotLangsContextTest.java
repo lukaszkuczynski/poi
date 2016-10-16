@@ -13,6 +13,7 @@ import org.springframework.context.annotation.Import;
 import com.google.common.collect.Lists;
 
 import pl.gihon.fdd.poi.ContextTest;
+import pl.gihon.fdd.poi.PlaceHelper;
 import pl.gihon.fdd.poi.config.Config;
 import pl.gihon.fdd.poi.model.Place;
 
@@ -30,12 +31,8 @@ public class FilterMustNotLangsContextTest extends ContextTest {
 
 	@Test
 	public void ioc_hasFilterDefined() {
-		Place urdiPlace = new Place(1L, "U", "U");
-		urdiPlace.setLang2("urdi");
-		urdiPlace.setLang1("");
-		Place americanPlace = new Place(2L, "A", "A");
-		americanPlace.setLang1("english");
-		americanPlace.setLang2("other");
+		Place urdiPlace = PlaceHelper.withLangs("urdi", "");
+		Place americanPlace = PlaceHelper.withLangs("english", "others");
 		List<Place> places = Lists.newArrayList(urdiPlace, americanPlace);
 
 		//

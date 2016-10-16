@@ -7,9 +7,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 @JsonPropertyOrder({ "id", "city", "streetAndFlat", "otherHost", "status", "lastMet", "lang1", "lang2", "other_rl",
 		"key", "latitude", "longitude", "test" })
 public class Place {
-	protected long id;
-	protected String city;
-	protected String streetAndFlat;
+	private long id;
+	private String city;
+	private String streetAndFlat;
 	private String otherHost;
 	private String status = "";
 	private Date lastMet;
@@ -94,11 +94,15 @@ public class Place {
 		super();
 	}
 
-	public Place(long id, String streetAndFlat, String city) {
+	public Place(long id, String streetAndFlat, String city, String lang1, String lang2, Date lastMet, String status) {
 		super();
 		this.id = id;
 		this.streetAndFlat = streetAndFlat;
 		this.city = city;
+		this.lang1 = lang1;
+		this.lang2 = lang2;
+		this.lastMet = lastMet;
+		this.status = status;
 	}
 
 	@Override
@@ -112,6 +116,7 @@ public class Place {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((city == null) ? 0 : city.hashCode());
+		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((streetAndFlat == null) ? 0 : streetAndFlat.hashCode());
 		return result;
 	}
@@ -129,6 +134,8 @@ public class Place {
 			if (other.city != null)
 				return false;
 		} else if (!city.equals(other.city))
+			return false;
+		if (id != other.id)
 			return false;
 		if (streetAndFlat == null) {
 			if (other.streetAndFlat != null)
