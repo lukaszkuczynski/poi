@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import pl.gihon.fdd.poi.filter.ExcludedForFilter;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.filter.PredicateForFilter;
+import pl.gihon.fdd.poi.importer.AreasImporter;
 import pl.gihon.fdd.poi.importer.LocatedPlacesImporter;
 import pl.gihon.fdd.poi.importer.PlacesImporter;
 import pl.gihon.fdd.poi.io.StorageService;
@@ -33,6 +35,7 @@ import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.model.Place;
 import pl.gihon.fdd.poi.printer.googlemymaps.CsvPlacePrinter;
+import pl.gihon.fdd.poi.printer.oldpythonprinter.PyJsonPrinter;
 import pl.gihon.fdd.poi.validator.ValidationException;
 import pl.gihon.fdd.poi.validator.Validator;
 
@@ -63,7 +66,8 @@ public class MainController {
 	private GoogleLocalisator localisator;
 	@Autowired
 	private LocatedPlacesImporter locatedPlacesImporter;
-
+	@Autowired
+	private AreasImporter areasImporter;
 	@Autowired
 	private List<PredicateForFilter> filters;
 
@@ -185,6 +189,22 @@ public class MainController {
 		return HOME_REDIRECT;
 	}
 
+	@PostMapping("print/areas")
+	public RedirectView printAreas(@ModelAttribute("areas") List<Area> areas, RedirectAttributes redirectAttributes)
+			throws IOException {
+		File areasFile = Files.createTempFile("areas", ".json").toFile();
+		File placesFile = Files.createTempFile("pyplaces", ".json").toFile();
+
+		PyJsonPrinter printer = new PyJsonPrinter(areasFile, placesFile);
+		printer.print(areas);
+
+		String msg = String.format("%d areas printed, areas file %s, places file %s", areas.size(), areasFile,
+				placesFile);
+		LOGGER.info(msg);
+		redirectAttributes.addFlashAttribute("message", msg);
+		return HOME_REDIRECT;
+	}
+
 	@PostMapping("upload/mymaps")
 	public RedirectView uploadFromMyMaps(@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
 			RedirectAttributes redirectAttributes, MultipartFile file) throws IOException {
@@ -195,7 +215,40 @@ public class MainController {
 		unassignedPlaces.clear();
 		unassignedPlaces.addAll(readUnassignedPlaces);
 		String msg = String.format("From uploaded file I have read %d unassigned places, path %s",
-				unassignedPlaces.size(), tempUploaded.getAbsolutePath());
+				readUnassignedPlaces.size(), tempUploaded.getAbsolutePath());
+		LOGGER.info(msg);
+		redirectAttributes.addFlashAttribute("message", msg);
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("upload/areas")
+	public RedirectView uploadAreas(@ModelAttribute("areas") List<Area> areas,
+			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
+			RedirectAttributes redirectAttributes, MultipartFile file) throws IOException {
+		if (unassignedPlaces.size() == 0) {
+			throw new IllegalStateException("cannot import areas if no unassigned places present!");
+		}
+
+		File tempUploaded = Files.createTempFile("uploaded_pyareas", ".json").toFile();
+		file.transferTo(tempUploaded);
+
+		areas.clear();
+		List<Area> areasImported = areasImporter.importAreas(tempUploaded, unassignedPlaces);
+		List<Long> importedAssignedPlacesIds = new ArrayList<>();
+		for (Area area : areasImported) {
+			importedAssignedPlacesIds
+					.addAll(area.getPlaces().stream().map(LocatedPlace::getId).collect(Collectors.toList()));
+		}
+		List<LocatedPlace> placesUnassignedAfterImport = unassignedPlaces.stream()
+				.filter(lp -> !importedAssignedPlacesIds.contains(lp.getId())).collect(Collectors.toList());
+		areas.addAll(areasImported);
+		int unassignedBefore = unassignedPlaces.size();
+		unassignedPlaces.clear();
+		unassignedPlaces.addAll(placesUnassignedAfterImport);
+		int unassignedAfter = unassignedPlaces.size();
+		String msg = String.format(
+				"From uploaded file I have read %d areas, unassigned places before %d after %d, temp file is at path %s",
+				areasImported.size(), unassignedBefore, unassignedAfter, tempUploaded.getAbsolutePath());
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
 		return HOME_REDIRECT;
