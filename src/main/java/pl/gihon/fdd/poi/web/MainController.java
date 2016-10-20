@@ -23,6 +23,8 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.google.common.collect.Lists;
+
 import pl.gihon.fdd.poi.filter.ExcludedForFilter;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.filter.PredicateForFilter;
@@ -180,14 +182,21 @@ public class MainController {
 	@PostMapping("print/mymaps")
 	public RedirectView printToMyMaps(@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
 			@ModelAttribute("areas") List<Area> areas, RedirectAttributes redirectAttributes) throws IOException {
-		String file = Files.createTempFile("mymaps", ".csv").toFile().getAbsolutePath();
-		CsvPlacePrinter myMapsPrinter = new CsvPlacePrinter(file);
+		File file = Files.createTempFile("mymaps", ".csv").toFile();
+		String filePath = file.getAbsolutePath();
+		List<SavedFile> savedFiles = Lists.newArrayList(new SavedFile(file.getName(), link(file.getName())));
+		CsvPlacePrinter myMapsPrinter = new CsvPlacePrinter(filePath);
 		myMapsPrinter.printWithUnassigned(areas, unassignedPlaces);
 		String msg = String.format("%d areas and %d unassigned places printed to file at %s", areas.size(),
 				unassignedPlaces.size(), file);
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
+		redirectAttributes.addFlashAttribute("savedFiles", savedFiles);
 		return HOME_REDIRECT;
+	}
+
+	private String link(String name) {
+		return "/files/" + name;
 	}
 
 	@PostMapping("print/areas")
@@ -196,6 +205,9 @@ public class MainController {
 		File areasFile = Files.createTempFile("areas", ".json").toFile();
 		File placesFile = Files.createTempFile("pyplaces", ".json").toFile();
 
+		List<SavedFile> savedFiles = Lists.newArrayList(new SavedFile(areasFile.getName(), link(areasFile.getName())),
+				new SavedFile(placesFile.getName(), link(placesFile.getName())));
+
 		PyJsonPrinter printer = new PyJsonPrinter(areasFile, placesFile);
 		printer.print(areas);
 
@@ -203,6 +215,8 @@ public class MainController {
 				placesFile);
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
+		redirectAttributes.addFlashAttribute("savedFiles", savedFiles);
+
 		return HOME_REDIRECT;
 	}
 

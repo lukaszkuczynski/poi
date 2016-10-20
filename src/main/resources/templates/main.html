@@ -43,7 +43,7 @@
           </ul>
           
            <form action="/print/mymaps" method="post" class="form-inline">
-			   <button class="btn btn-outline-success" type="submit">Export to MyMaps</button>
+			   <button class="btn btn-outline-success" type="submit">Save to MyMaps</button>
 			 </form>	
            <form action="/print/areas" method="post" class="form-inline">
 			   <button class="btn btn-outline-success" type="submit">Save ALL</button>
@@ -63,6 +63,13 @@
 	<div class="alert alert-danger" th:if="${errors}">
 		<p th:text="'error count is ' + ${#lists.size(errors)}" />
 	</div>
+
+	<div class="alert alert-info" th:if="${savedFiles}">
+		<p th:each="file : ${savedFiles}">
+			<a th:href="${file.link}" th:text="${file.name}"></a> 
+		</p>
+	</div>
+
 
 	<a href="#" id="prephase_visible">Show/Hide prephase</a>
 
