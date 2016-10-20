@@ -9,19 +9,56 @@
 	
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+	  <script>
+	  $( function() {
+	    $( "#accordion" ).accordion({
+	        heightStyle: "content",
+	        active: 1
+	    });
+	  } );
+	  </script>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"/>
+	<link rel="stylesheet" th:href="@{/css/poi.css}" />
 <script>
 	$('document').ready(function() {
 		$('a#prephase_visible').click(function() {
 			$('#prephase').toggle();
 		});
-
-		$('a#prephase_visible').click();
 	});
 </script>
 </head>
 
 <body>
+
+ 	<nav class="navbar navbar-default navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">PoI</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+          </ul>
+          
+           <form action="/print/mymaps" method="post" class="form-inline">
+			   <button class="btn btn-outline-success" type="submit">Export to MyMaps</button>
+			 </form>	
+           <form action="/print/areas" method="post" class="form-inline">
+			   <button class="btn btn-outline-success" type="submit">Save ALL</button>
+			 </form>	
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+
+
 <div class="container">
 
 	<div class="alert alert-info" th:if="${message}">
@@ -36,7 +73,7 @@
 
 
 
-	<div id="prephase">
+	<div id="prephase" style="display:none;">
 		<h1>import</h1>
 		<div>
 			<form method="POST" enctype="multipart/form-data" action="/csv_file">
@@ -98,72 +135,66 @@
 		</form>
 	</div>
 
-	<h1>unassigned places upload</h1>
-	<div>
-		<form method="POST" enctype="multipart/form-data" action="/upload/mymaps">
-			<table>
-				<tr>
-					<td>Mymaps CSV File to upload:</td>
-					<td><input type="file" name="file" /></td>
-				</tr>
-				<tr>
-					<td></td>
-					<td><input type="submit" value="Upload" /></td>
-				</tr>
-			</table>
-		</form>
+	<div id="accordion">
+  	<h3>Import files</h3>
+  	<div>
+  		<h4>Upload MyMaps CSV</h4>
+		<div>
+			<p>This should be valid exported CSV file</p>
+			<form method="POST" enctype="multipart/form-data" action="/upload/mymaps">
+						<input type="file" name="file" />
+						<input type="submit" value="Upload" />
+			</form>
+		</div>
+		
+		<h4>Upload areas</h4>
+		<div>
+			<form method="POST" enctype="multipart/form-data" action="/upload/areas">
+						<input type="file" name="file" />
+						<input type="submit" value="Upload" />
+			</form>
+		</div>
+
 	</div>
 
-
-	<h1>areas</h1>
-	
-	<h2>import areas</h2>
-	
+	<h3>Assign places to areas</h3>
 	<div>
-		<form method="POST" enctype="multipart/form-data" action="/upload/areas">
-					<input type="file" name="file" />
-					<input type="submit" value="Upload" />
+		
+		<h4>add new area</h4>
+		<form method="post" action="/area">
+			<label for="nr">nr</label> <input name="nr"
+				th:value="${suggestedAreaNr}" /> <label for="name">name</label> <input
+				name="name" /> <input type="submit" />
 		</form>
-	</div>
 	
-	<h2>add new area</h2>
-	<form method="post" action="/area">
-		<label for="nr">nr</label> <input name="nr"
-			th:value="${suggestedAreaNr}" /> <label for="name">name</label> <input
-			name="name" /> <input type="submit" />
-	</form>
+		<div class="area" th:each="area : ${areas}">
+			<h3>add place to area</h3>
+			<label th:text="'area name ' + ${area.name} + ' nr '+ ${area.nr}"></label>
+			<form action="/area/assign-place" method="post">
+				<label for="id">place id</label><input type="number" name="placeId" />
+				<input type="hidden" name="areaNr" th:value="${area.nr}" />
+			</form>
+			<h3>list of places</h3>
+			<div class="place_in_area" th:each="place : ${area.places}">
+				<label th:text="${place.id}"></label>
+			</div>
+		</div>
+	
 
-	<div class="area" th:each="area : ${areas}">
-		<h3>add place to area</h3>
-		<label th:text="'area name ' + ${area.name} + ' nr '+ ${area.nr}"></label>
-		<form action="/area/assign-place" method="post">
-			<label for="id">place id</label><input type="number" name="placeId" />
-			<input type="hidden" name="areaNr" th:value="${area.nr}" />
-		</form>
-		<h3>list of places</h3>
-		<div class="place_in_area" th:each="place : ${area.places}">
-			<label th:text="${place.id}"></label>
+
+		<h1>unassigned places</h1>
+	
+		<div id="unassignedPlaces">
+			<div class="unassignedPlace" th:each="place : ${unassignedPlaces}">
+				<span>place </span> <span th:text="${place.streetAndFlat}" /> <span>id</span>
+				<span th:text="${place.id}">id</span>
+			</div>
 		</div>
 	</div>
-	<h3>Export mymaps</h3>
-	<form action="/print/mymaps" method="post">
-		<button type="submit">Export</button>
-	</form>
-	<h3>Print to Python!!</h3>
-	<form action="/print/areas" method="post">
-		<button type="submit">Export</button>
-	</form>
-
-
-	<h1>unassigned places</h1>
-
-	<div id="unassignedPlaces">
-		<div class="unassignedPlace" th:each="place : ${unassignedPlaces}">
-			<span>place </span> <span th:text="${place.streetAndFlat}" /> <span>id</span>
-			<span th:text="${place.id}">id</span>
-		</div>
 	</div>
 
 </div>
+
+
 </body>
 </html>
