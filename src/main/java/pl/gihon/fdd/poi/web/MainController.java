@@ -25,8 +25,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import pl.gihon.fdd.poi.filter.ExcludedForFilter;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.filter.PredicateForFilter;
-import pl.gihon.fdd.poi.importer.Importer;
 import pl.gihon.fdd.poi.importer.LocatedPlacesImporter;
+import pl.gihon.fdd.poi.importer.PlacesImporter;
 import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
 import pl.gihon.fdd.poi.model.Area;
@@ -54,7 +54,7 @@ public class MainController {
 	@Autowired
 	private StorageService storage;
 	@Autowired
-	private Importer importer;
+	private PlacesImporter importer;
 	@Autowired
 	private Validator validator;
 	@Autowired

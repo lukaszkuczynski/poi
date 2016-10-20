@@ -1,0 +1,11 @@
+[ {
+  "nr" : 1,
+  "name" : "area1",
+  "district" : "",
+  "place_ids" : [ 1, 2 ]
+}, {
+  "nr" : 2,
+  "name" : "area2",
+  "district" : "",
+  "place_ids" : [ 3, 4 ]
+} ]

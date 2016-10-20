@@ -11,7 +11,7 @@ import pl.gihon.fdd.poi.model.Place;
 
 public class CsvImporterTest {
 
-	Importer importer = new CsvImporter();
+	PlacesImporter importer = new CsvImporter();
 
 	@Test
 	public void importer_givenFile_importsCorrectNumberOfPlaces() {

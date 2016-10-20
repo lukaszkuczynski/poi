@@ -8,7 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import pl.gihon.fdd.poi.filter.Filter;
-import pl.gihon.fdd.poi.importer.Importer;
+import pl.gihon.fdd.poi.importer.PlacesImporter;
 import pl.gihon.fdd.poi.localisator.Localisator;
 import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
@@ -18,7 +18,7 @@ import pl.gihon.fdd.poi.validator.Validator;
 
 public class PoiTestE2E {
 
-	Importer importer;
+	PlacesImporter importer;
 	Filter filter;
 	Validator validator;
 	Localisator localisator;

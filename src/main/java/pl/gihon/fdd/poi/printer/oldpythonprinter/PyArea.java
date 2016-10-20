@@ -13,6 +13,10 @@ public class PyArea {
 	private String district;
 	private List<Long> place_ids;
 
+	public PyArea() {
+		super();
+	}
+
 	public PyArea(Area area) {
 		this.nr = area.getNr();
 		this.name = area.getName();

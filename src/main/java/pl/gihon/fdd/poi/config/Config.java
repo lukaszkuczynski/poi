@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import pl.gihon.fdd.poi.filter.FilterMustNotLangs;
 import pl.gihon.fdd.poi.filter.FilterMustNotStatus;
 import pl.gihon.fdd.poi.importer.CsvImporter;
-import pl.gihon.fdd.poi.importer.Importer;
+import pl.gihon.fdd.poi.importer.PlacesImporter;
 import pl.gihon.fdd.poi.model.Place;
 import pl.gihon.fdd.poi.validator.PredicateValidator;
 import pl.gihon.fdd.poi.validator.SinglePlaceValidator;
@@ -32,7 +32,7 @@ public class Config {
 	private String statusesMustNot;
 
 	@Bean
-	Importer importer() {
+	PlacesImporter importer() {
 		return new CsvImporter();
 	}
 

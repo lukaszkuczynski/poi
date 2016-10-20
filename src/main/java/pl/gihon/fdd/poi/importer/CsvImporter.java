@@ -16,7 +16,7 @@ import pl.gihon.fdd.poi.model.Place;
  * @author luk
  *
  */
-public class CsvImporter implements Importer {
+public class CsvImporter implements PlacesImporter {
 
 	private static final char DEFAULT_COLUMN_SEPARATOR = '\t';
 	private char columnSeparator = DEFAULT_COLUMN_SEPARATOR;
