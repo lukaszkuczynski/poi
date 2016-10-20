@@ -1,4 +1,4 @@
 id,city,streetAndFlat,otherHost,status,lastMet,lang1,lang2,other_rl,key,latitude,longitude,test,areaNr,fullAddress
-3,Konin,"Leśna 41",,,,,,,,52.240507,18.277877,,,"Konin,Leśna 41"
+3,Konin,"Leśna 41",a,stat,2011-01-01,lang1,lang2,other_rl,,52.240507,18.277877,,,"Konin,Leśna 41"
 4,Konin,"Leśna 42",,,,,,,,52.2404403,18.2780509,,,"Konin,Leśna 42"
 20,Konin,"Leśna 43",,,,,,,,52.240569,18.277981,,,"Konin,Leśna 43"
