@@ -165,14 +165,15 @@ public class MainController {
 			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
 			@ModelAttribute("areas") List<Area> areas) {
 		Optional<Area> areaCandidate = areas.stream().filter(a -> a.getNr() == form.getAreaNr()).findFirst();
-		Optional<LocatedPlace> placeCandidate = unassignedPlaces.stream().filter(p -> p.getId() == form.getPlaceId())
-				.findFirst();
-		// TODO : what if no place or no area
-		LocatedPlace place = placeCandidate.get();
+		for (int id : form.getPlaceIdNumbers()) {
+			Optional<LocatedPlace> placeCandidate = unassignedPlaces.stream().filter(p -> p.getId() == id).findFirst();
+			// TODO : what if no place or no area
+			LocatedPlace place = placeCandidate.get();
 
-		areaCandidate.get().addPlace(place);
-		int indexOf = unassignedPlaces.indexOf(place);
-		unassignedPlaces.remove(indexOf);
+			areaCandidate.get().addPlace(place);
+			int indexOf = unassignedPlaces.indexOf(place);
+			unassignedPlaces.remove(indexOf);
+		}
 		return HOME_REDIRECT;
 	}
 
