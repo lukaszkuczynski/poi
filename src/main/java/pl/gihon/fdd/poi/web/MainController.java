@@ -191,7 +191,7 @@ public class MainController {
 
 		File tempUploaded = Files.createTempFile("uploaded_mymaps", ".csv").toFile();
 		file.transferTo(tempUploaded);
-		List<LocatedPlace> readUnassignedPlaces = locatedPlacesImporter.importFromMyMapsExportFile(tempUploaded);
+		List<LocatedPlace> readUnassignedPlaces = locatedPlacesImporter.importUnassignedPlaces(tempUploaded);
 		unassignedPlaces.clear();
 		unassignedPlaces.addAll(readUnassignedPlaces);
 		String msg = String.format("From uploaded file I have read %d unassigned places, path %s",

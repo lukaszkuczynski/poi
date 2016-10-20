@@ -22,7 +22,7 @@ public class LocatedPlacesImporterTest {
 
 		File file = new File(this.getClass().getClassLoader().getResource("konin_assigned.csv").getFile());
 
-		List<LocatedPlace> located = importer.importFromMyMapsExportFile(file);
+		List<LocatedPlace> located = importer.importUnassignedPlaces(file);
 
 		assertThat(located).isNotEmpty();
 		LocatedPlace firstPlace = located.get(0);
@@ -40,6 +40,16 @@ public class LocatedPlacesImporterTest {
 		assertThat(firstPlace.getLongitude()).isEqualTo("18.277877");
 		assertThat(firstPlace.getStatus()).isEqualTo("stat");
 		assertThat(firstPlace.getStreetAndFlat()).isEqualTo("Leśna 41");
+	}
+
+	@Test
+	public void importer_doestnImportAssignedPlaces() {
+		LocatedPlacesImporter importer = new LocatedPlacesImporter();
+		File file = new File(this.getClass().getClassLoader().getResource("konin_assigned.csv").getFile());
+		List<LocatedPlace> located = importer.importUnassignedPlaces(file);
+
+		assertThat(located).hasSize(1);
+
 	}
 
 }

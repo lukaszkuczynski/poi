@@ -23,10 +23,13 @@ public class LocatedPlacesImporter {
 	private static final char DEFAULT_COLUMN_SEPARATOR = ',';
 	private char columnSeparator = DEFAULT_COLUMN_SEPARATOR;
 
-	public List<LocatedPlace> importFromMyMapsExportFile(File file) {
+	public List<LocatedPlace> importUnassignedPlaces(File file) {
 		try {
-			List<AssignedPlace> assigned = loadAssignedPlaces(file);
-			List<LocatedPlace> located = assigned.stream().map(ap -> assignedToLocated(ap))
+			List<AssignedPlace> assignedAndNotAssigned = loadAssignedPlaces(file);
+			List<AssignedPlace> reallyAssigned = assignedAndNotAssigned.stream().filter(ap -> ap.getAreaNr() == null)
+					.collect(Collectors.toList());
+
+			List<LocatedPlace> located = reallyAssigned.stream().map(ap -> assignedToLocated(ap))
 					.collect(Collectors.toList());
 			return located;
 		} catch (IOException e) {
