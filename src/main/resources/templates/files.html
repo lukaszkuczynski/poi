@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.0/moment.min.js"></script>	
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+</head>
+
+<script type="text/javascript">
+	function refresh() {
+		$.get('/files/api', function(files) {
+			$("#files").find("tr:gt(0)").remove();
+			for (id in files) {
+				var file = files[id];
+				var row = "";
+				row += 	"<tr>"
+				row +=  	"<td>";
+				row +=			file.name;
+				row +=		"</td>";
+				row +=  	"<td>";
+				row +=			file.size;
+				row +=		"</td>";
+				row +=  	"<td>";
+				row +=			moment(file.modified).toString();
+				row +=		"</td>";
+				row +=  	"<td>";
+				row +=			'<a href="/files/'+file.name+'">'+file.path+"</a>"
+				row +=		"</td>";				
+				row += 	"</tr>"
+				$("#files").last().append(row);
+			}
+		});	
+	}
+
+	$('document').ready(function(){
+		$('#refresh').click(function() {
+			refresh();
+		});
+		
+		refresh();
+	});
+</script>
+
+<body>
+
+<div class="container">
+
+<button id="refresh">Refresh</button>
+
+<h1>Files in temp folder</h1>
+
+
+	<table id="files" class="table-bordered">
+		<tr> <th>name</th><th>size</th><th>modified</th><th>path</th> </tr>
+	</table>
+
+
+</div>
+
+</body>
+
+</html>
