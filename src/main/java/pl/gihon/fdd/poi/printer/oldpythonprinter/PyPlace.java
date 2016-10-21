@@ -1,5 +1,7 @@
 package pl.gihon.fdd.poi.printer.oldpythonprinter;
 
+import java.text.SimpleDateFormat;
+
 import pl.gihon.fdd.poi.model.LocatedPlace;
 
 public class PyPlace {
@@ -24,7 +26,8 @@ public class PyPlace {
 		this.status = place.getStatus();
 		this.lastmet = "";
 		if (place.getLastMet() != null) {
-			this.lastmet = place.getLastMet().toString();
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			this.lastmet = sdf.format(place.getLastMet());
 		}
 		this.lang1 = place.getLang1();
 		this.lang2 = place.getLang2();
