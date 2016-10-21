@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Getting Started: Serving Web Content</title>
+<title>pOi</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"
 		integrity="sha256-/SIrNqv8h6QGKDuNoLGA4iret+kyesCkHGzVUUV0shc="
@@ -194,8 +194,11 @@
 				<button type="submit" class="btn btn-default">Add place</button>
 			</form>
 			<h4>places in area</h4>
-			<div class="place_in_area" th:each="place : ${area.places}">
-				(<span th:text="${place.id}"></span>) <span th:text="${place.streetAndFlat}" />
+			<div class="place_in_area" th:each="place : ${area.places}">							 
+				<form class="inline" method="post" th:action="'/area/'+${area.nr}+'/remove/'+${place.id}">
+					(<span th:text="${place.id}"></span>) <span th:text="${place.streetAndFlat}" />
+					<button class="btn btn-link">remove</button>					
+				</form>
 			</div>
 			<hr/>
 		</div>

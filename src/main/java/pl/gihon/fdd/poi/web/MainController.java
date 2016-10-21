@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -281,6 +282,28 @@ public class MainController {
 				"From uploaded file I have read %d areas, unassigned places before %d after %d, temp file is at path %s",
 				areasImported.size(), unassignedBefore, unassignedAfter, fileTempAreas.getAbsolutePath());
 		LOGGER.info(msg);
+		redirectAttributes.addFlashAttribute("message", msg);
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("area/{areaid}/remove/{placeid}")
+	public RedirectView removePlaceFromArea(@PathVariable("areaid") long areaid, @PathVariable("placeid") long placeid,
+			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
+			@ModelAttribute("areas") List<Area> areas, RedirectAttributes redirectAttributes) {
+
+		Optional<Area> areaCandidate = areas.stream().filter(a -> a.getNr() == areaid).findFirst();
+		Area area = areaCandidate.get();
+		Optional<LocatedPlace> placeCandidate = area.getPlaces().stream().filter(lp -> lp.getId() == placeid).findAny();
+		boolean removed = area.getPlaces().removeIf(p -> p.getId() == placeid);
+		String msg = "";
+		if (removed) {
+			msg = String.format("place id %d removed from area %d", placeid, areaid);
+			LOGGER.debug(msg);
+			unassignedPlaces.add(placeCandidate.get());
+		} else {
+			msg = String.format("NOT REMOVED place id %d from area %d", placeid, areaid);
+			LOGGER.warn(msg);
+		}
 		redirectAttributes.addFlashAttribute("message", msg);
 		return HOME_REDIRECT;
 	}
