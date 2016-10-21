@@ -1,0 +1,24 @@
+[ {
+  "city" : "Konin",
+  "street" : "Leśna 41",
+  "status" : "stat",
+  "lastmet" : "2011-01-01",
+  "lang1" : "lang1",
+  "lang2" : "lang2",
+  "id" : 3,
+  "latitude" : "52.240507",
+  "longitude" : "18.277877",
+  "latlng" : "52.240507,18.277877"
+}, {
+  "city" : "Konin",
+  "street" : "Leśna 42",
+  "status" : "stat2",
+  "lastmet" : "2011-01-02",
+  "lang1" : "lang3",
+  "lang2" : "lang4",
+  "id" : 4,
+  "latitude" : "52.240508",
+  "longitude" : "18.277878",
+  "latlng" : "52.240508,18.277878"
+}
+]

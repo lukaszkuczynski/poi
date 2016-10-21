@@ -18,7 +18,7 @@ import pl.gihon.fdd.poi.model.Place;
 import pl.gihon.fdd.poi.printer.googlemymaps.AssignedPlace;
 
 @Component
-public class LocatedPlacesImporter {
+public class LocatedPlacesImporterCsv {
 
 	private static final char DEFAULT_COLUMN_SEPARATOR = ',';
 	private char columnSeparator = DEFAULT_COLUMN_SEPARATOR;

@@ -15,6 +15,9 @@ public class PyPlace {
 	private String longitude;
 	private String latlng;
 
+	public PyPlace() {
+	}
+
 	public PyPlace(LocatedPlace place) {
 		this.city = place.getCity();
 		this.street = place.getStreetAndFlat();

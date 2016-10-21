@@ -13,12 +13,12 @@ import org.junit.Test;
 
 import pl.gihon.fdd.poi.model.LocatedPlace;
 
-public class LocatedPlacesImporterTest {
+public class LocatedPlacesImporterCsvTest {
 
 	@Test
 	public void importer_importsPlaceWithAllItsProperties() {
 
-		LocatedPlacesImporter importer = new LocatedPlacesImporter();
+		LocatedPlacesImporterCsv importer = new LocatedPlacesImporterCsv();
 
 		File file = new File(this.getClass().getClassLoader().getResource("konin_assigned.csv").getFile());
 
@@ -44,7 +44,7 @@ public class LocatedPlacesImporterTest {
 
 	@Test
 	public void importer_doestnImportAssignedPlaces() {
-		LocatedPlacesImporter importer = new LocatedPlacesImporter();
+		LocatedPlacesImporterCsv importer = new LocatedPlacesImporterCsv();
 		File file = new File(this.getClass().getClassLoader().getResource("konin_assigned.csv").getFile());
 		List<LocatedPlace> located = importer.importUnassignedPlaces(file);
 

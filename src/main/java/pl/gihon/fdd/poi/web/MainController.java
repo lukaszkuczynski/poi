@@ -29,7 +29,8 @@ import pl.gihon.fdd.poi.filter.ExcludedForFilter;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.filter.PredicateForFilter;
 import pl.gihon.fdd.poi.importer.AreasImporter;
-import pl.gihon.fdd.poi.importer.LocatedPlacesImporter;
+import pl.gihon.fdd.poi.importer.LocatedPlacesImporterCsv;
+import pl.gihon.fdd.poi.importer.LocatedPlacesReaderJson;
 import pl.gihon.fdd.poi.importer.PlacesImporter;
 import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
@@ -67,11 +68,13 @@ public class MainController {
 	@Autowired
 	private GoogleLocalisator localisator;
 	@Autowired
-	private LocatedPlacesImporter locatedPlacesImporter;
+	private LocatedPlacesImporterCsv locatedPlacesImporter;
 	@Autowired
 	private AreasImporter areasImporter;
 	@Autowired
 	private List<PredicateForFilter> filters;
+	@Autowired
+	private LocatedPlacesReaderJson placesJsonReader;
 
 	@ModelAttribute("areas")
 	public List<Area> areas() {
@@ -236,19 +239,23 @@ public class MainController {
 		return HOME_REDIRECT;
 	}
 
-	@PostMapping("upload/areas")
+	@PostMapping("upload/py")
 	public RedirectView uploadAreas(@ModelAttribute("areas") List<Area> areas,
 			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
-			RedirectAttributes redirectAttributes, MultipartFile file) throws IOException {
-		if (unassignedPlaces.size() == 0) {
-			throw new IllegalStateException("cannot import areas if no unassigned places present!");
-		}
+			RedirectAttributes redirectAttributes, MultipartFile areasFile, MultipartFile placesFile)
+					throws IOException {
 
-		File tempUploaded = Files.createTempFile("uploaded_pyareas", ".json").toFile();
-		file.transferTo(tempUploaded);
+		File fileTempAreas = Files.createTempFile("uploaded_pyareas", ".json").toFile();
+		areasFile.transferTo(fileTempAreas);
+		File fileTempPlaces = Files.createTempFile("uploaded_pyplaces", ".json").toFile();
+		placesFile.transferTo(fileTempPlaces);
 
 		areas.clear();
-		List<Area> areasImported = areasImporter.importAreas(tempUploaded, unassignedPlaces);
+		List<LocatedPlace> places = placesJsonReader.readPlaces(fileTempPlaces);
+		unassignedPlaces.clear();
+		unassignedPlaces.addAll(places);
+		List<Area> areasImported = areasImporter.importAreas(fileTempAreas, unassignedPlaces);
+
 		List<Long> importedAssignedPlacesIds = new ArrayList<>();
 		for (Area area : areasImported) {
 			importedAssignedPlacesIds
@@ -263,7 +270,7 @@ public class MainController {
 		int unassignedAfter = unassignedPlaces.size();
 		String msg = String.format(
 				"From uploaded file I have read %d areas, unassigned places before %d after %d, temp file is at path %s",
-				areasImported.size(), unassignedBefore, unassignedAfter, tempUploaded.getAbsolutePath());
+				areasImported.size(), unassignedBefore, unassignedAfter, fileTempAreas.getAbsolutePath());
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
 		return HOME_REDIRECT;

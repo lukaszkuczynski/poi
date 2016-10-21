@@ -140,20 +140,25 @@
 	<div id="accordion">
   	<h3>Import files</h3>
   	<div>
-  		<h4>Upload MyMaps CSV</h4>
-		<div>
-			<p>This should be valid exported CSV file</p>
-			<form method="POST" enctype="multipart/form-data" action="/upload/mymaps">
-						<input type="file" name="file" />
-						<input type="submit" value="Upload" />
-			</form>
-		</div>
+<!--   		<h4>Upload MyMaps CSV</h4> -->
+<!-- 		<div> -->
+<!-- 			<p>This should be valid exported CSV file</p> -->
+<!-- 			<form method="POST" enctype="multipart/form-data" action="/upload/mymaps"> -->
+<!-- 						<input type="file" name="file" /> -->
+<!-- 						<input type="submit" value="Upload" /> -->
+<!-- 			</form> -->
+<!-- 		</div> -->
 		
-		<h4>Upload areas</h4>
+		<h4>Upload</h4>
 		<div>
-			<form method="POST" enctype="multipart/form-data" action="/upload/areas">
-						<input type="file" name="file" />
-						<input type="submit" value="Upload" />
+			<form method="POST" enctype="multipart/form-data" action="/upload/py" class="inline">
+				<div class="form-group">
+					<label for="areasFile">areas json</label><input class="form-control" id="areasFile" type="file" name="areasFile" />
+				</div>
+				<div class="form-group">
+					<label for="placesFile">places json</label><input class="form-control" id="placesFile" type="file" name="placesFile" />
+				</div>
+				<button class="btn btn-default" type="submit">Upload</button>
 			</form>
 		</div>
 
