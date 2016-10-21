@@ -32,4 +32,9 @@ public class AssignPlaceToAreaForm {
 		return ids;
 	}
 
+	@Override
+	public String toString() {
+		return "AssignPlaceToAreaForm [areaNr=" + areaNr + ", placeIds=" + placeIds + "]";
+	}
+
 }

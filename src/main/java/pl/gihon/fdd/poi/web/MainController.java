@@ -111,8 +111,27 @@ public class MainController {
 	}
 
 	@PostMapping("area")
-	public RedirectView addArea(@ModelAttribute("areas") List<Area> areas, @ModelAttribute Area area) {
+	public RedirectView addArea(@ModelAttribute("areas") List<Area> areas, @ModelAttribute Area area,
+			RedirectAttributes redirectAttributes) {
 		areas.add(area);
+		String msg = String.format("area no %d named %s created", area.getNr(), area.getName());
+		LOGGER.debug(msg);
+		redirectAttributes.addFlashAttribute("areaMessage", msg);
+		return HOME_REDIRECT;
+	}
+
+	@PostMapping("area/{id}/remove")
+	public RedirectView removeArea(@ModelAttribute("areas") List<Area> areas,
+			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
+			RedirectAttributes redirectAttributes, @PathVariable("id") long id) {
+		Optional<Area> areaCandidate = areas.stream().filter(a -> a.getNr() == id).findFirst();
+		Area area = areaCandidate.get();
+		int noOfPlaces = area.getPlaces().size();
+		unassignedPlaces.addAll(area.getPlaces());
+		areas.remove(area);
+		String msg = String.format("area no %d remove, all %d places placed back in unassigned", id, noOfPlaces);
+		LOGGER.debug(msg);
+		redirectAttributes.addFlashAttribute("areaMessage", msg);
 		return HOME_REDIRECT;
 	}
 
@@ -178,7 +197,7 @@ public class MainController {
 	@PostMapping("area/assign-place")
 	public RedirectView assignPlaceToArea(@ModelAttribute AssignPlaceToAreaForm form,
 			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
-			@ModelAttribute("areas") List<Area> areas) {
+			@ModelAttribute("areas") List<Area> areas, RedirectAttributes redirectAttributes) {
 		Optional<Area> areaCandidate = areas.stream().filter(a -> a.getNr() == form.getAreaNr()).findFirst();
 		for (int id : form.getPlaceIdNumbers()) {
 			Optional<LocatedPlace> placeCandidate = unassignedPlaces.stream().filter(p -> p.getId() == id).findFirst();
@@ -189,6 +208,9 @@ public class MainController {
 			int indexOf = unassignedPlaces.indexOf(place);
 			unassignedPlaces.remove(indexOf);
 		}
+		String msg = String.format("places %s assigned to area %d", form.getPlaceIds(), form.getAreaNr());
+		LOGGER.debug(msg);
+		redirectAttributes.addFlashAttribute("areaMessage", msg);
 		return HOME_REDIRECT;
 	}
 
@@ -304,7 +326,7 @@ public class MainController {
 			msg = String.format("NOT REMOVED place id %d from area %d", placeid, areaid);
 			LOGGER.warn(msg);
 		}
-		redirectAttributes.addFlashAttribute("message", msg);
+		redirectAttributes.addFlashAttribute("areaMessage", msg);
 		return HOME_REDIRECT;
 	}
 

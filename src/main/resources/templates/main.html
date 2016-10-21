@@ -166,7 +166,11 @@
 
 	<h3>Assign places to areas</h3>
 	<div>
-<!-- 		<a href="#" id="add-area-link">Add area</a> -->
+
+		<div class="alert alert-info" th:if="${areaMessage}">
+			<p th:text="${areaMessage}" />
+		</div>
+
 		<div id="add-area">
 		<h4>new area</h4>
 			<form class="form-inline" method="post" action="/area">
@@ -200,6 +204,9 @@
 					<button class="btn btn-link">remove</button>					
 				</form>
 			</div>
+			<form class="inline" method="post" th:action="'/area/'+${area.nr}+'/remove'">
+				<button type="submit" class="btn btn-default">remove Area</button>
+			</form>
 			<hr/>
 		</div>
 	
