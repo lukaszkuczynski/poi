@@ -29,7 +29,9 @@ public class FilesController {
 	@ResponseBody
 	@GetMapping("/files/api")
 	public List<EasyFile> getFiles() {
-		return folderService.loadFromTempFiltered("areas", "pyplaces", "mymaps");
+		List<EasyFile> files = folderService.loadFromTempFiltered("areas", "pyplaces", "mymaps");
+		files.sort((ef1, ef2) -> ef2.getModified().compareTo(ef1.getModified()));
+		return files;
 	}
 
 }

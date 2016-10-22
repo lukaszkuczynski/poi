@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -33,7 +34,11 @@ public class LocatedPlacesReaderJson {
 	private LocatedPlace toLocated(PyPlace pp) {
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-			Date lastMetDate = sdf.parse(pp.getLastmet());
+			String lastmet = pp.getLastmet();
+			Date lastMetDate = null;
+			if (!StringUtils.isEmpty(lastmet)) {
+				lastMetDate = sdf.parse(pp.getLastmet());
+			}
 			return new LocatedPlace(pp.getLatitude(), pp.getLongitude(), new Place(pp.getId(), pp.getStreet(),
 					pp.getCity(), pp.getLang1(), pp.getLang2(), lastMetDate, pp.getStatus()));
 		} catch (ParseException e) {

@@ -45,11 +45,16 @@ import pl.gihon.fdd.poi.validator.Validator;
 
 @RequestMapping(MainController.HOME_MAPPING)
 @Controller
-@SessionAttributes({ "areas", "places", "unassignedPlaces" })
+@SessionAttributes({ "areas", "places", "locatedPlaces", "unassignedPlaces" })
 public class MainController {
 
 	@ModelAttribute("places")
 	private List<Place> places() {
+		return new ArrayList<>();
+	}
+
+	@ModelAttribute("locatedPlaces")
+	private List<LocatedPlace> locatedPlaces() {
 		return new ArrayList<>();
 	}
 
@@ -183,10 +188,13 @@ public class MainController {
 
 	@PostMapping("locate")
 	public RedirectView locate(@ModelAttribute("places") List<Place> places,
+			@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces,
 			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
 			RedirectAttributes redirectAttributes) {
+		locatedPlaces.clear();
+		locatedPlaces.addAll(localisator.locate(places));
 		unassignedPlaces.clear();
-		unassignedPlaces.addAll(localisator.locate(places));
+		unassignedPlaces.addAll(locatedPlaces);
 		String msg = String.format("%d places located, became 'unassigned places'", unassignedPlaces.size());
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
@@ -234,9 +242,10 @@ public class MainController {
 		return "/files/" + name;
 	}
 
-	@PostMapping("print/areas")
-	public RedirectView printAreas(@ModelAttribute("areas") List<Area> areas, RedirectAttributes redirectAttributes)
-			throws IOException {
+	@PostMapping("print/py")
+	public RedirectView printAreas(@ModelAttribute("areas") List<Area> areas,
+			@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces, RedirectAttributes redirectAttributes)
+					throws IOException {
 		File areasFile = Files.createTempFile("areas", ".json").toFile();
 		File placesFile = Files.createTempFile("pyplaces", ".json").toFile();
 
@@ -245,9 +254,10 @@ public class MainController {
 
 		PyJsonPrinter printer = new PyJsonPrinter(areasFile, placesFile);
 		printer.print(areas);
+		printer.printPlaces(locatedPlaces);
 
-		String msg = String.format("%d areas printed, areas file %s, places file %s", areas.size(), areasFile,
-				placesFile);
+		String msg = String.format("%d areas and %d places printed, areas file %s, places file %s", areas.size(),
+				locatedPlaces.size(), areasFile, placesFile);
 		LOGGER.info(msg);
 		redirectAttributes.addFlashAttribute("message", msg);
 		redirectAttributes.addFlashAttribute("savedFiles", savedFiles);
@@ -273,6 +283,7 @@ public class MainController {
 
 	@PostMapping("upload/py")
 	public RedirectView uploadAreas(@ModelAttribute("areas") List<Area> areas,
+			@ModelAttribute("locatedPlaces") List<LocatedPlace> locatedPlaces,
 			@ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
 			RedirectAttributes redirectAttributes, MultipartFile areasFile, MultipartFile placesFile)
 					throws IOException {
@@ -284,6 +295,8 @@ public class MainController {
 
 		areas.clear();
 		List<LocatedPlace> places = placesJsonReader.readPlaces(fileTempPlaces);
+		locatedPlaces.clear();
+		locatedPlaces.addAll(places);
 		unassignedPlaces.clear();
 		unassignedPlaces.addAll(places);
 		List<Area> areasImported = areasImporter.importAreas(fileTempAreas, unassignedPlaces);

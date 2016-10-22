@@ -26,17 +26,17 @@ public class PyJsonPrinter implements Printer {
 
 	@Override
 	public void print(List<Area> areas) throws IOException {
-		List<LocatedPlace> places = new ArrayList<>();
 		List<PyArea> pyAreas = new ArrayList<>();
 		for (Area area : areas) {
 			pyAreas.add(new PyArea(area));
-			places.addAll(area.getPlaces());
 		}
-		List<PyPlace> pyPlaces = places.stream().map(p -> new PyPlace(p)).collect(Collectors.toList());
-
-		printPlacesToJson(pyPlaces);
 		printAreasToJson(pyAreas);
 
+	}
+
+	public void printPlaces(List<LocatedPlace> locatedPlaces) throws IOException {
+		List<PyPlace> pyPlaces = locatedPlaces.stream().map(p -> new PyPlace(p)).collect(Collectors.toList());
+		printPlacesToJson(pyPlaces);
 	}
 
 	private void printAreasToJson(List<PyArea> pyAreas) throws IOException {
