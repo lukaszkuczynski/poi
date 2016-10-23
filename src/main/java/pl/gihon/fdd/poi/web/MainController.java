@@ -84,22 +84,13 @@ public class MainController {
 
 	@ModelAttribute("areas")
 	public List<Area> areas() {
-		List<Area> areas = Lists.newArrayList();
-		Area area1 = new Area(1, "area1");
-		area1.addPlace(unassignedPlaces().get(0));
-		unassignedPlaces().remove(0);
-		areas.add(area1);
-		return areas;
+		return new ArrayList<>();
 	}
 
 	@ModelAttribute("unassignedPlaces")
 	public List<LocatedPlace> unassignedPlaces() {
-		List<LocatedPlace> placesPredefined = new ArrayList<>();
-		placesPredefined.add(new LocatedPlace("lat", "lng", new Place(1L, "st1", "ci1", "", "", null, "")));
-		placesPredefined.add(new LocatedPlace("lat", "lng", new Place(2L, "st2", "ci2", "", "", null, "")));
-		placesPredefined.add(new LocatedPlace("lat", "lng", new Place(3L, "st3", "ci3", "", "", null, "")));
-		placesPredefined.add(new LocatedPlace("lat", "lng", new Place(4L, "st4", "ci4", "", "", null, "")));
-		return placesPredefined;
+		// return placesPredefined;
+		return new ArrayList<>();
 	}
 
 	@GetMapping("")
