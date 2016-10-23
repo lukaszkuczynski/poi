@@ -1,3 +1,11 @@
 body {
   padding-top: 70px;
 }
+
+.place_in_area {
+	float:left;
+	border: 1px solid gray
+}
+.area_operations {
+	clear: both;
+}

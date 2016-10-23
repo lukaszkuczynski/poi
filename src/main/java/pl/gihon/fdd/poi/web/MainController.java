@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -98,6 +99,13 @@ public class MainController {
 			@ModelAttribute("areas") List<Area> areas, @ModelAttribute("places") List<Place> places) {
 		ModelAndView modelAndView = new ModelAndView("main");
 		modelAndView.addObject("unassignedPlaces", unassignedPlaces);
+		long suggestedAreaNr = 1;
+		if (areas.size() > 0) {
+			areas.sort((a1, a2) -> Math.toIntExact(a2.getNr() - a1.getNr()));
+			Optional<Long> max = areas.stream().map(Area::getNr).max(Comparator.naturalOrder());
+			suggestedAreaNr = max.get() + 1;
+		}
+		modelAndView.addObject("suggestedAreaNr", suggestedAreaNr);
 		modelAndView.addObject("areas", areas);
 		modelAndView.addObject("places", places);
 		modelAndView.addObject("apiPart", localisator.getStartOfApiKey());
