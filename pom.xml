@@ -5,7 +5,7 @@
 
 	<groupId>pl.gihon.fdd</groupId>
 	<artifactId>poi</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1-RELEASE</version>
 	<packaging>jar</packaging>
 
 	<name>poi</name>
