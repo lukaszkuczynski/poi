@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.opencsv.CSVReader;
@@ -20,6 +21,7 @@ import pl.gihon.fdd.poi.exception.PoiException;
 import pl.gihon.fdd.poi.web.KeyVal;
 
 @Component
+@Profile(value = "cachemap")
 public class LocationCacheMap implements LocationCache {
 
 	private static final char CSV_SEPARATOR = ';';
