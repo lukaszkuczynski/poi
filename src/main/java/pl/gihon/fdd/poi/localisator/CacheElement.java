@@ -12,7 +12,15 @@ public class CacheElement {
 	private String key;
 	private String value;
 
-	public String getValue() {
+    public CacheElement(String key, String value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    public CacheElement() {
+    }
+
+    public String getValue() {
 		return value;
 	}
 

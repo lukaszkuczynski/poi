@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 
 import pl.gihon.fdd.poi.localisator.google.LocationCache;
@@ -27,15 +28,18 @@ public class CacheMongo implements LocationCache {
 
 	@Override
 	public void put(String key, String value) {
-
+        mongoTemplate.save(new CacheElement(key, value));
 	}
 
 	@Override
 	public Optional<String> getValue(String key) {
 		Query searchUserQuery = new Query(Criteria.where("key").is(key));
-
 		CacheElement element = mongoTemplate.findOne(searchUserQuery, CacheElement.class);
-		return Optional.ofNullable(element.getValue());
+        if (element != null) {
+            return Optional.ofNullable(element.getValue());
+        } else {
+            return Optional.empty();
+        }
 	}
 
 	@Override
@@ -60,7 +64,7 @@ public class CacheMongo implements LocationCache {
 
 	@Override
 	public int getSize() {
-		return 0;
+		return (int) mongoTemplate.getCollection(mongoTemplate.getCollectionName(CacheElement.class)).count();
 	}
 
 	@Override
