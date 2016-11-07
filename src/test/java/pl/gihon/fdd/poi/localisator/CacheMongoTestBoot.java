@@ -2,6 +2,8 @@ package pl.gihon.fdd.poi.localisator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.Optional;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -42,6 +44,18 @@ public class CacheMongoTestBoot extends MongoBootTest {
         int size = cacheMongo.getSize();
 
         assertThat(size).isNotZero();
+    }
+
+
+    @Test
+    public void testImport() throws Exception {
+        InputStream stream = new FileInputStream("d:\\temp\\cache_export8276454072585177254.csv");
+        cacheMongo.importToCache(stream);
+
+        Optional<String> value = cacheMongo.getValue("Wrocław,Nulla 2/2");
+        assertThat(value.isPresent()).isTrue();
+
+
     }
 
 }
