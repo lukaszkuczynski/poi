@@ -23,6 +23,4 @@ public interface LocationCache {
 
 	public int getSize();
 
-	public List<KeyVal> getAllRows();
-
 }

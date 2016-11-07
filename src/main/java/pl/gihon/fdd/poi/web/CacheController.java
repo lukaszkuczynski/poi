@@ -40,8 +40,6 @@ public class CacheController {
 
 	@GetMapping
 	public String cache(Model model) {
-		List<KeyVal> keyvals = locationCache.getAllRows();
-		model.addAttribute("rows", keyvals);
 		model.addAttribute("cacheSize", locationCache.getSize());
 		return "cache";
 	}

@@ -88,15 +88,4 @@ public class LocationCacheMap implements LocationCache {
 		return map.size();
 	}
 
-	@Override
-	public List<KeyVal> getAllRows() {
-		List<KeyVal> keyvals = new ArrayList<>();
-
-		for (String key : map.keySet()) {
-			String valueText = this.getValue(key).get();
-			keyvals.add(new KeyVal(key, valueText));
-		}
-		return keyvals;
-	}
-
 }

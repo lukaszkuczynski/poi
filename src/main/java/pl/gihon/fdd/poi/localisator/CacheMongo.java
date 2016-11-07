@@ -93,8 +93,4 @@ public class CacheMongo implements LocationCache {
 		return mongoTemplate.getCollection(mongoTemplate.getCollectionName(CacheElement.class));
 	}
 
-	@Override
-	public List<KeyVal> getAllRows() {
-		throw new RuntimeException("NYI");
-	}
 }
