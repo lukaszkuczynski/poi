@@ -11,6 +11,7 @@ import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.LocatedPlace;
 import pl.gihon.fdd.poi.printer.Printer;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -35,14 +36,24 @@ public class HtmlTemplatePrinter implements Printer {
 
     @Override
     public void print(List<Area> areas) throws IOException {
-        Context context = new Context();
-        context.setVariable("name", "name from test");
-        String filename = "out.html";
 
+        for(Area area : areas) {
+            printOneArea(area);
+        }
+
+    }
+
+    private void printOneArea(Area area) throws IOException {
+        Context context = new Context();
+
+        String filename = "out"+area.getNr()+".html";
+
+        context.setVariable("area", area);
         String content = templateEngineForHtml.process("template", context);
         String outputFileName = outputPath + filename;
         FileOutputStream fos = new FileOutputStream(outputFileName);
         fos.write(content.getBytes());
+
     }
 
     @Override

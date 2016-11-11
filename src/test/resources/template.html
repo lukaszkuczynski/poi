@@ -1,14 +1,63 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
+    <link rel="stylesheet" href="bootstrap.min.css"/>
+    <style>
+        div#map { height: {{height}}px; width: {{width}}px}
+        table {font-size : 10px; width: {{width}}px !important}
+        table td {height: 35px}
+        td.status {font-size: 8px; text-transform: uppercase; }
+        table td:nth-child(2), th:nth-child(2) {width: 102}
+        table td:nth-child(3), th:nth-child(3) {width: 130}
+        div#down {font-size: 9px}
+    </style>
+
 <head>
 
 </head>
-<body  class="claro">
-<div>
+<body>
 
-    <h1 th:text="${name}"/>
+<div id="container">
 
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-xs-6">
+            <h3>Territory nr <span th:text="${area.nr}">00</span></h3>
+            <h4 th:text="${area.name}">name</h4>
+        </div>
+        <div class="col-sm-6 col-md-6 col-xs-6 text-right">
+            <!--{% if not qr_img_url is none %}-->
+            <!--<img src="{{qr_img_url}}" />-->
+            <!--{% endif %}-->
+        </div>
+
+    </div>
+
+    <div id="map">
+        <img th:src="${imageSrc}" />
+    </div>
+
+    <table class="table table-striped">
+        <tr>
+            <th> Id </th>
+            <th> Address </th>
+            <th> Languages </th>
+            <th> Last met </th>
+            <th> Result </th>
+            <th> Visitor and Date </th>
+        </tr>
+
+
+        <tr th:each="place : ${area.places}">
+            <td th:text="${place.id}"></td>
+            <td th:text="${place.streetAndFlat}"></td>
+            <td><span th:text="${place.lang1}"/> <span th:text="${place.lang2}"/></td>
+            <td th:text="${place.lastMet}"></td>
+            <td class="status">Covered[__] Delete [__] Do not call [__]</td>
+            <td></td>
+        </tr>
+
+    </table>
 </div>
+
 </body>
 </html>
