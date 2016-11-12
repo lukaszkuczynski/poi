@@ -16,6 +16,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
@@ -48,7 +51,7 @@ public class HtmlTemplatePrinter implements Printer {
 
     @Override
     public void print(List<Area> areas) throws IOException {
-
+        logger.info("printing {} areas with noCache {}", areas.size(), noCache);
         for(Area area : areas) {
             printOneArea(area);
         }
@@ -77,22 +80,18 @@ public class HtmlTemplatePrinter implements Printer {
 
     private String ensureImagePathForArea(Area area) throws IOException {
         String imgFileName = getAreaImageFileName(area);
-        if (!noCache) {
-            if (isCachedImageFor(area)) {
-                imgFileName = cachedImagePathFor(area);
-            } else {
-                staticMapCreator.getForArea(area, imgFileName);
-            }
+        if (noCache || !isCachedImageFor(area)) {
+            logger.debug("will use map creator and save on {}", imgFileName);
+            staticMapCreator.getForArea(area, imgFileName);
         }
         return imgFileName;
     }
 
-    private String cachedImagePathFor(Area area) {
-        return "";
-    }
-
     private boolean isCachedImageFor(Area area) {
-        return false;
+        Path path = Paths.get(getAreaImageFileName(area));
+        boolean cached = Files.exists(path);
+        logger.debug("checking if cached for area {} : cache {}", area, cached);
+        return cached;
     }
 
     @Override
