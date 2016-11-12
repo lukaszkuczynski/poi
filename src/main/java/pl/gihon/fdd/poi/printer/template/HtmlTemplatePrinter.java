@@ -41,6 +41,8 @@ public class HtmlTemplatePrinter implements Printer {
 
 
     private static Logger logger = LoggerFactory.getLogger(HtmlTemplatePrinter.class);
+
+    @Autowired
     private StaticMapCreator staticMapCreator;
 
 
