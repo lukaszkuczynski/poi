@@ -2,6 +2,8 @@ package pl.gihon.fdd.poi.importer;
 
 import de.micromata.opengis.kml.v_2_2_0.*;
 import org.junit.Test;
+import pl.gihon.fdd.poi.model.*;
+import pl.gihon.fdd.poi.model.Polygon;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -27,6 +29,25 @@ public class KmlAreaImporterTestIntegration {
         // then
         String name = kml.getFeature().getName();
         assertThat(name).isEqualTo("London, UK");
+    }
+
+    @Test
+    public void importer_readsPolygons() throws Exception {
+        // given
+        KmlAreaImporter importer = new KmlAreaImporter();
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("poi test.kml");
+
+        // when
+        List<pl.gihon.fdd.poi.model.Polygon> polygons = importer.importPolygons(is);
+
+        // then
+        assertThat(polygons).hasSize(2);
+        Polygon zwierzyniec = polygons.get(0);
+        //20.1159668,51.9748355,0.0 20.1073837,51.9489206,0.0 20.1386261,51.9531526,0.0 20.1357079,51.9716631,0.0 20.1159668,51.9748355,0.0
+        assertThat(zwierzyniec.getName()).isEqualTo("zwierzyniec");
+        assertThat(zwierzyniec.getCoordinates()).contains("20.1159668,51.9748355");
+
+
     }
 
 }
