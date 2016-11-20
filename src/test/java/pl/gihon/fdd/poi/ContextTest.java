@@ -12,6 +12,8 @@ public abstract class ContextTest {
 		System.setProperty("GOOGLE_API_KEY", "FAKE_KEY");
 		System.setProperty("LANGS_MUST_NOT", "FAKE_LANGS_NOT");
 		System.setProperty("STATUSES_MUST_NOT", "FAKE_STATUSES_NOT");
+		System.setProperty("MONGO_URI", "mongodb://localhost/poi");
+
 	}
 
 }

@@ -20,8 +20,6 @@ import com.opencsv.CSVWriter;
 import pl.gihon.fdd.poi.exception.PoiException;
 import pl.gihon.fdd.poi.web.KeyVal;
 
-@Component
-@Profile(value = "cachemap")
 public class LocationCacheMap implements LocationCache {
 
 	private static final char CSV_SEPARATOR = ';';

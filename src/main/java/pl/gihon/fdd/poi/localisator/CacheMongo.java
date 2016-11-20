@@ -26,7 +26,6 @@ import pl.gihon.fdd.poi.web.KeyVal;
  * Created by luk on 2016-10-31.
  */
 @Component
-@Profile(value = "cachemongo")
 public class CacheMongo implements LocationCache {
 
 	private static final char CSV_SEPARATOR = ';';

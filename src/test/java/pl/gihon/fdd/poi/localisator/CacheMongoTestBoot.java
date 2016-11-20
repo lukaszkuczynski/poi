@@ -10,13 +10,13 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import pl.gihon.fdd.poi.MongoBootTest;
+import pl.gihon.fdd.poi.ContextTest;
 
 /**
  * Created by luk on 2016-10-31.
  */
 
-public class CacheMongoTestBoot extends MongoBootTest {
+public class CacheMongoTestBoot extends ContextTest {
 
 	@Autowired
 	private CacheMongo cacheMongo;
