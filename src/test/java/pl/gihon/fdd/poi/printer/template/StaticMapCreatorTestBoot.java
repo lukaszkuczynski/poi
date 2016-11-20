@@ -3,15 +3,13 @@ package pl.gihon.fdd.poi.printer.template;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import pl.gihon.fdd.poi.AreasHelper;
-import pl.gihon.fdd.poi.ContextTest;
-import pl.gihon.fdd.poi.GoogleApiContextTest;
-
-import static org.junit.Assert.*;
+import pl.gihon.fdd.poi.BootTest;
+import pl.gihon.fdd.poi.GoogleApiBootTest;
 
 /**
  * Created by luk on 2016-11-12.
  */
-public class StaticMapCreatorTestBoot extends GoogleApiContextTest {
+public class StaticMapCreatorTestBoot extends GoogleApiBootTest {
 
     @Autowired
     private StaticMapCreator staticMapCreator;

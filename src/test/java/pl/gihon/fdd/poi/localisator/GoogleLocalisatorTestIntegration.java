@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.collect.Lists;
 
-import pl.gihon.fdd.poi.GoogleApiContextTest;
 import pl.gihon.fdd.poi.PlaceHelper;
 import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
 import pl.gihon.fdd.poi.localisator.google.LocationCache;
@@ -22,7 +21,7 @@ import pl.gihon.fdd.poi.model.Place;
  * @author luk
  *
  */
-public class GoogleLocalisatorTestIntegration extends GoogleApiContextTest {
+public class GoogleLocalisatorTestIntegration {
 
 	@Autowired
 	private GoogleLocalisator localisator;
