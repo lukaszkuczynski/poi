@@ -20,8 +20,7 @@ before_script:
   - echo $MAVEN_OPTS
 
 jdk:
-  - openjdk7
-#  - oraclejdk8
+  - oraclejdk8
 
 os:
   - linux
