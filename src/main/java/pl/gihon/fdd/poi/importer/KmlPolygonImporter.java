@@ -1,6 +1,7 @@
 package pl.gihon.fdd.poi.importer;
 
 import de.micromata.opengis.kml.v_2_2_0.*;
+import org.springframework.stereotype.Component;
 import pl.gihon.fdd.poi.model.Polygon;
 
 import java.io.InputStream;
@@ -10,6 +11,7 @@ import java.util.List;
 /**
  * Created by luk on 2016-11-18.
  */
+@Component
 public class KmlPolygonImporter {
 
     public Kml importAreas(InputStream is) {
