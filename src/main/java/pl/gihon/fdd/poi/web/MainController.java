@@ -30,10 +30,7 @@ import com.google.common.collect.Lists;
 import pl.gihon.fdd.poi.filter.ExcludedForFilter;
 import pl.gihon.fdd.poi.filter.Filter;
 import pl.gihon.fdd.poi.filter.PredicateForFilter;
-import pl.gihon.fdd.poi.importer.AreasImporter;
-import pl.gihon.fdd.poi.importer.LocatedPlacesImporterCsv;
-import pl.gihon.fdd.poi.importer.LocatedPlacesReaderJson;
-import pl.gihon.fdd.poi.importer.PlacesImporter;
+import pl.gihon.fdd.poi.importer.*;
 import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
 import pl.gihon.fdd.poi.model.Area;
@@ -82,6 +79,8 @@ public class MainController {
 	private List<PredicateForFilter> filters;
 	@Autowired
 	private LocatedPlacesReaderJson placesJsonReader;
+	@Autowired
+	private KmlAreasReader kmlAreasReader;
 
 	@ModelAttribute("areas")
 	public List<Area> areas() {
@@ -319,6 +318,22 @@ public class MainController {
 		redirectAttributes.addFlashAttribute("message", msg);
 		return HOME_REDIRECT;
 	}
+
+	@PostMapping("upload/kml")
+	public RedirectView uploadKml(@ModelAttribute("areas") List<Area> areas,
+									RedirectAttributes redirectAttributes, MultipartFile kmlFile)
+			throws IOException {
+
+//		File fileTempKml = Files.createTempFile("uploaded_areas", ".kml").toFile();
+//		kmlFile.transferTo(fileTempKml);
+
+		areas.clear();
+		List<Area> areasRead = kmlAreasReader.read(kmlFile.getInputStream());
+		areas.addAll(areasRead);
+
+		return HOME_REDIRECT;
+	}
+
 
 	@PostMapping("area/{areaid}/remove/{placeid}")
 	public RedirectView removePlaceFromArea(@PathVariable("areaid") long areaid, @PathVariable("placeid") long placeid,

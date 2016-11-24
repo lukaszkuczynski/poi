@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Created by luk on 2016-11-18.
  */
-public class KmlAreaImporter {
+public class KmlPolygonImporter {
 
     public Kml importAreas(InputStream is) {
         final Kml kml = Kml.unmarshal(is);
