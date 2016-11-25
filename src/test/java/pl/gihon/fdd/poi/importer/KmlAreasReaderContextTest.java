@@ -35,4 +35,18 @@ public class KmlAreasReaderContextTest {
         assertThat(area1st.getName()).isEqualTo("zwierzyniec");
         assertThat(area1st.hasPolygon()).isTrue();
     }
+
+    @Test
+    public void reader_returnsAreasNumberedFrom1() throws Exception {
+
+        InputStream is = this.getClass().getClassLoader().getResourceAsStream("poi test.kml");
+
+        List<Area> areas = reader.read(is);
+        assertThat(areas).hasSize(2);
+        Area area1st = areas.get(0);
+        Area area2nd = areas.get(1);
+        assertThat(area1st.getNr()).isEqualTo(1);
+        assertThat(area2nd.getNr()).isEqualTo(2);
+    }
+
 }

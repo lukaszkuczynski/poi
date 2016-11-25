@@ -11,8 +11,10 @@ import pl.gihon.fdd.poi.model.Area;
 import pl.gihon.fdd.poi.model.Polygon;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * Created by luk on 2016-11-24.
@@ -30,6 +32,7 @@ public class KmlAreasReader {
 
         List<Polygon> polygons = polygonImporter.importPolygons(kmlFile);
         List<Area> areas = polygons.stream().map( p -> new Area(p)).collect(Collectors.toList());
+        IntStream.range(0,areas.size()).forEach( idx -> areas.get(idx).setNr(idx+1) );
 
         return areas;
     }
