@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.opencsv.CSVReader;
@@ -19,7 +20,6 @@ import com.opencsv.CSVWriter;
 import pl.gihon.fdd.poi.exception.PoiException;
 import pl.gihon.fdd.poi.web.KeyVal;
 
-@Component
 public class LocationCacheMap implements LocationCache {
 
 	private static final char CSV_SEPARATOR = ';';
@@ -84,17 +84,6 @@ public class LocationCacheMap implements LocationCache {
 	@Override
 	public int getSize() {
 		return map.size();
-	}
-
-	@Override
-	public List<KeyVal> getAllRows() {
-		List<KeyVal> keyvals = new ArrayList<>();
-
-		for (String key : map.keySet()) {
-			String valueText = this.getValue(key).get();
-			keyvals.add(new KeyVal(key, valueText));
-		}
-		return keyvals;
 	}
 
 }

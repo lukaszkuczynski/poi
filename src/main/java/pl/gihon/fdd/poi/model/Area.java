@@ -8,11 +8,17 @@ public class Area {
 	private long nr;
 	private String name;
 	private List<LocatedPlace> places = new ArrayList<>();
+	private Polygon polygon;
 
 	public Area(long nr, String name) {
 		super();
 		this.nr = nr;
 		this.name = name;
+	}
+
+	public Area(Polygon polygon) {
+		this.name = polygon.getName();
+		this.polygon = polygon;
 	}
 
 	public Area() {
@@ -52,4 +58,7 @@ public class Area {
 
 	}
 
+	public boolean hasPolygon() {
+		return polygon != null;
+	}
 }

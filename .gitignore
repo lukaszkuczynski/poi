@@ -16,6 +16,8 @@ src/test/java/pl/gihon/fdd/poi/secured/
 *.iws
 *.iml
 *.ipr
+*.eml
+*.userlibraries
 
 ### NetBeans ###
 nbproject/private/
