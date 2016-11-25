@@ -1,5 +1,7 @@
 package pl.gihon.fdd.poi.model;
 
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +10,7 @@ import java.util.Optional;
  * Matches places to areas basing on Polygon
  * Created by luk on 2016-11-25.
  */
+@Component
 public class AreaMatcher {
 
     public AreaMatchResult match(List<LocatedPlace> places, List<Area> areas) {
