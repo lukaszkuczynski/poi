@@ -14,4 +14,12 @@ public class AreaMatchResult {
         this.areas = areas;
         this.unassignedPlaces = unassignedPlaces;
     }
+
+    public List<Area> getAreas() {
+        return areas;
+    }
+
+    public List<LocatedPlace> getUnassignedPlaces() {
+        return unassignedPlaces;
+    }
 }

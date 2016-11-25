@@ -22,4 +22,14 @@ public class AreasHelper {
 		return areas;
 
 	}
+
+	public static List<Area> areasWithPolygons_20552253_24552653() {
+
+		Area area1 = new Area(PolygonHelper.square("area1", 20.0, 55.0,22.0,53.0));
+		Area area2 = new Area(PolygonHelper.square("area2", 24.0, 55.0,26.0,53.0));
+		List<Area> areas = Lists.newArrayList(area1, area2);
+		return areas;
+
+	}
+
 }

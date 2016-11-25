@@ -2,6 +2,7 @@ package pl.gihon.fdd.poi.model;
 
 import com.google.common.collect.Lists;
 import org.junit.Test;
+import pl.gihon.fdd.poi.PolygonHelper;
 
 import java.util.ArrayList;
 
@@ -35,4 +36,12 @@ public class PolygonTest {
         assertThat(outsideContains).isFalse();
 
     }
+
+
+    @Test
+    public void helper_givesValidSquare() {
+        Polygon polygon = PolygonHelper.square("", 22.0, 55.0, 20.0, 53.0);
+        assertThat(polygon.contains("21","54"));
+    }
+
 }
