@@ -33,9 +33,9 @@ public class KmlPolygonImporter {
             List<Feature> tg = f.getFeature();
 
 
-            List<String> coordinates = new ArrayList<>();
             //Iterating through placemarks inside all folders
             for (Object ftg : tg) {
+                List<String> coordinates = new ArrayList<>();
                 Placemark g = (Placemark) ftg;
                 String polygonName = g.getName();
                 Geometry geometry = g.getGeometry();

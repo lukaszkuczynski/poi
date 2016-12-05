@@ -24,8 +24,13 @@ public class KmlAreasReader {
 
     private static final Logger logger = LoggerFactory.getLogger(KmlAreasReader.class);
 
-    @Autowired
+
     private KmlPolygonImporter polygonImporter;
+
+    @Autowired
+    public KmlAreasReader(KmlPolygonImporter polygonImporter) {
+        this.polygonImporter = polygonImporter;
+    }
 
     public List<Area> read(InputStream kmlFile) {
         logger.debug("reading for stream {} ", kmlFile);
