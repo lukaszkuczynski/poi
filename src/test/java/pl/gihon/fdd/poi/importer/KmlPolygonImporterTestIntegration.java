@@ -4,6 +4,7 @@ import de.micromata.opengis.kml.v_2_2_0.*;
 import org.junit.Test;
 import pl.gihon.fdd.poi.model.Polygon;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -29,6 +30,18 @@ public class KmlPolygonImporterTestIntegration {
         assertThat(name).isEqualTo("London, UK");
     }
 
+    @Test
+    public void importer_readsKmlFileExtra() throws Exception {
+        // given
+        KmlPolygonImporter importer = new KmlPolygonImporter();
+        InputStream is = new FileInputStream("d:\\temp\\Subs.kml");
+
+        // when
+        List<pl.gihon.fdd.poi.model.Polygon> polygons = importer.importPolygonsOneLayer(is);
+
+        // then
+        assertThat(polygons).hasSize(56);
+    }
     @Test
     public void importer_readsPolygons() throws Exception {
         // given

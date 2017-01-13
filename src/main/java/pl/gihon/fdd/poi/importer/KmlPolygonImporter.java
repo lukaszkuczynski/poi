@@ -54,4 +54,33 @@ public class KmlPolygonImporter {
         return polygons;
 
     }
+
+    public List<Polygon> importPolygonsOneLayer(InputStream is) {
+
+        Kml kml = this.importAreas(is);
+
+        // then
+        final Document document = (Document)kml.getFeature();
+        List<Feature> t = document.getFeature();
+        List<Polygon> polygons = new ArrayList<>();
+        //for each loop for iterating through the folders
+        for(Object o : t) {
+                List<String> coordinates = new ArrayList<>();
+                Placemark g = (Placemark) o;
+                String polygonName = g.getName();
+                Geometry geometry = g.getGeometry();
+                de.micromata.opengis.kml.v_2_2_0.Polygon polygon = (de.micromata.opengis.kml.v_2_2_0.Polygon) geometry;
+                List coordList = polygon.getOuterBoundaryIs().getLinearRing().getCoordinates();
+                for (Object point : coordList) {
+                    Coordinate coordinate = (Coordinate) point;
+                    coordinates.add(coordinate.toString());
+                }
+                polygons.add(new Polygon(polygonName, coordinates));
+
+
+
+        }
+        return polygons;
+
+    }
 }

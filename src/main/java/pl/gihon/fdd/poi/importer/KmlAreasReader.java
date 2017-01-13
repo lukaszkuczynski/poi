@@ -35,7 +35,7 @@ public class KmlAreasReader {
     public List<Area> read(InputStream kmlFile) {
         logger.debug("reading for stream {} ", kmlFile);
 
-        List<Polygon> polygons = polygonImporter.importPolygons(kmlFile);
+        List<Polygon> polygons = polygonImporter.importPolygonsOneLayer(kmlFile);
         List<Area> areas = polygons.stream().map( p -> new Area(p)).collect(Collectors.toList());
         IntStream.range(0,areas.size()).forEach( idx -> areas.get(idx).setNr(idx+1) );
 
