@@ -4,6 +4,7 @@ import de.micromata.opengis.kml.v_2_2_0.*;
 import org.junit.Test;
 import pl.gihon.fdd.poi.model.Polygon;
 
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.List;
 
@@ -30,6 +31,18 @@ public class KmlPolygonImporterTestIntegration {
     }
 
     @Test
+    public void importer_readsKmlFileExtra() throws Exception {
+        // given
+        KmlPolygonImporter importer = new KmlPolygonImporter();
+        InputStream is = new FileInputStream("d:\\temp\\Subs.kml");
+
+        // when
+        List<pl.gihon.fdd.poi.model.Polygon> polygons = importer.importPolygonsOneLayer(is);
+
+        // then
+        assertThat(polygons).hasSize(56);
+    }
+    @Test
     public void importer_readsPolygons() throws Exception {
         // given
         KmlPolygonImporter importer = new KmlPolygonImporter();
@@ -44,6 +57,7 @@ public class KmlPolygonImporterTestIntegration {
         //20.1159668,51.9748355,0.0 20.1073837,51.9489206,0.0 20.1386261,51.9531526,0.0 20.1357079,51.9716631,0.0 20.1159668,51.9748355,0.0
         assertThat(zwierzyniec.getName()).isEqualTo("zwierzyniec");
         assertThat(zwierzyniec.getCoordinates()).contains("20.1159668,51.9748355");
+        assertThat(zwierzyniec.getCoordinates()).hasSize(5);
 
 
     }

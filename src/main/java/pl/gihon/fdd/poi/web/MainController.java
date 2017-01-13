@@ -33,9 +33,7 @@ import pl.gihon.fdd.poi.filter.PredicateForFilter;
 import pl.gihon.fdd.poi.importer.*;
 import pl.gihon.fdd.poi.io.StorageService;
 import pl.gihon.fdd.poi.localisator.google.GoogleLocalisator;
-import pl.gihon.fdd.poi.model.Area;
-import pl.gihon.fdd.poi.model.LocatedPlace;
-import pl.gihon.fdd.poi.model.Place;
+import pl.gihon.fdd.poi.model.*;
 import pl.gihon.fdd.poi.printer.googlemymaps.CsvPlacePrinter;
 import pl.gihon.fdd.poi.printer.oldpythonprinter.PyJsonPrinter;
 import pl.gihon.fdd.poi.validator.ValidationException;
@@ -81,6 +79,8 @@ public class MainController {
 	private LocatedPlacesReaderJson placesJsonReader;
 	@Autowired
 	private KmlAreasReader kmlAreasReader;
+	@Autowired
+	private AreaMatcher areaMatcher;
 
 	@ModelAttribute("areas")
 	public List<Area> areas() {
@@ -321,15 +321,17 @@ public class MainController {
 
 	@PostMapping("upload/kml")
 	public RedirectView uploadKml(@ModelAttribute("areas") List<Area> areas,
+								  @ModelAttribute("unassignedPlaces") List<LocatedPlace> unassignedPlaces,
 									RedirectAttributes redirectAttributes, MultipartFile kmlFile)
 			throws IOException {
 
-//		File fileTempKml = Files.createTempFile("uploaded_areas", ".kml").toFile();
-//		kmlFile.transferTo(fileTempKml);
-
 		areas.clear();
 		List<Area> areasRead = kmlAreasReader.read(kmlFile.getInputStream());
-		areas.addAll(areasRead);
+		AreaMatchResult matchResult = areaMatcher.match(unassignedPlaces, areasRead);
+
+		unassignedPlaces.clear();
+		unassignedPlaces.addAll(matchResult.getUnassignedPlaces());
+		areas.addAll(matchResult.getAreas());
 
 		return HOME_REDIRECT;
 	}

@@ -61,4 +61,10 @@ public class Area {
 	public boolean hasPolygon() {
 		return polygon != null;
 	}
+
+	public boolean contains(LocatedPlace locatedPlace) {
+		return polygon.contains(locatedPlace.getLongitude(), locatedPlace.getLatitude());
+	}
+
+
 }
